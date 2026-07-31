@@ -190,6 +190,17 @@ export default function TemplateSelector({ user, onSelectScratch, onSelectTempla
     }
   };
 
+  const handleDeleteWorkspace = async (workspaceId) => {
+    if (!confirm("Are you sure you want to delete this workspace? This action cannot be undone.")) return;
+    try {
+      await deleteDoc(doc(db, "workspaces", workspaceId));
+      setWorkspaces(workspaces.filter(ws => ws.id !== workspaceId));
+    } catch (error) {
+      console.error("Error deleting workspace:", error);
+      alert("Failed to delete workspace.");
+    }
+  };
+
   const copyEmbed = (text, key) => {
     navigator.clipboard.writeText(text);
     setEmbedCopied(key);
@@ -380,15 +391,26 @@ export default function TemplateSelector({ user, onSelectScratch, onSelectTempla
                       </td>
                       <td style={{ padding: "10px 14px", fontFamily: "monospace", color: "#6b7280" }}>{ws.id}</td>
                       <td style={{ padding: "10px 14px", textAlign: "right" }}>
-                        <button
-                          onClick={() => onSelectWorkspace && onSelectWorkspace(ws)}
-                          title="Open Workspace Sandbox"
-                          style={{ padding: "6px", background: "transparent", border: "1px solid #e5e7eb", borderRadius: "6px", cursor: "pointer", color: "#7c3aed", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
-                          onMouseOver={(e) => { e.currentTarget.style.backgroundColor = "#f8fafc"; e.currentTarget.style.borderColor = "#ddd6fe"; }}
-                          onMouseOut={(e) => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.borderColor = "#e5e7eb"; }}
-                        >
-                          <MessageCircle size={14} />
-                        </button>
+                        <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end" }}>
+                          <button
+                            onClick={() => onSelectWorkspace && onSelectWorkspace(ws)}
+                            title="Open Workspace Sandbox"
+                            style={{ padding: "6px", background: "transparent", border: "1px solid #e5e7eb", borderRadius: "6px", cursor: "pointer", color: "#7c3aed", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
+                            onMouseOver={(e) => { e.currentTarget.style.backgroundColor = "#f8fafc"; e.currentTarget.style.borderColor = "#ddd6fe"; }}
+                            onMouseOut={(e) => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.borderColor = "#e5e7eb"; }}
+                          >
+                            <MessageCircle size={14} />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteWorkspace(ws.id)}
+                            title="Delete Workspace"
+                            style={{ padding: "6px", background: "transparent", border: "1px solid #e5e7eb", borderRadius: "6px", cursor: "pointer", color: "#ef4444", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
+                            onMouseOver={(e) => { e.currentTarget.style.backgroundColor = "#fef2f2"; e.currentTarget.style.borderColor = "#fecaca"; }}
+                            onMouseOut={(e) => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.borderColor = "#e5e7eb"; }}
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))

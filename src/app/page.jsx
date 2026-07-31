@@ -200,7 +200,7 @@ export default function SingleAgentSetup() {
   if (appState === "WORKSPACE_SANDBOX") {
     return (
       <div style={{ backgroundColor: "#ffffff", minHeight: "100vh", fontFamily: "Inter, sans-serif", display: "flex", justifyContent: "center", padding: "32px 24px" }}>
-        <div style={{ width: "100%", maxWidth: "1024px", display: "flex", flexDirection: "column", gap: "20px" }}>
+        <div style={{ width: "100%", maxWidth: "1280px", display: "flex", flexDirection: "column", gap: "20px" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <button
               onClick={() => setAppState("DASHBOARD")}

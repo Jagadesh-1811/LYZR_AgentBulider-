@@ -446,19 +446,36 @@ app.post('/api/run-workspace', authenticateToken, async (req, res) => {
 
     let currentContext = task;
     const session_id = `workspace_${Date.now()}`;
+    const pipelineStartedAt = Date.now();
+    const iso = () => new Date().toISOString();
 
     try {
+        // Emit pipeline metadata first so the dev console can render the full picture
+        sendEvent({
+            type: 'pipeline_start',
+            task,
+            agentIds,
+            agentCount: agentIds.length,
+            sessionId: session_id,
+            workspaceName: workspaceName || null,
+            timestamp: iso()
+        });
+
         for (let i = 0; i < agentIds.length; i++) {
             const agentId = agentIds[i];
-            sendEvent({ type: 'agent_start', agentId });
+            const message = i === 0 
+              ? currentContext 
+              : `Continue working on the following task with this context from the previous agent:\n\n${currentContext}`;
 
+            // Emit the exact payload sent upstream — this is what actually happens internally
+            sendEvent({ type: 'agent_start', agentId, index: i, message, timestamp: iso() });
+
+            const agentStartedAt = Date.now();
             const chatPayload = {
                 user_id: "default_user",
                 agent_id: agentId,
                 session_id: session_id,
-                message: i === 0 
-                  ? currentContext 
-                  : `Continue working on the following task with this context from the previous agent:\n\n${currentContext}`
+                message
             };
 
             const response = await axios.post('https://agent-prod.studio.lyzr.ai/v3/inference/chat/', chatPayload, {
@@ -468,22 +485,44 @@ app.post('/api/run-workspace', authenticateToken, async (req, res) => {
                 }
             });
 
+            const durationMs = Date.now() - agentStartedAt;
+
             if (response.data && response.data.response) {
                 currentContext = response.data.response;
-                sendEvent({ type: 'agent_done', agentId, result: currentContext });
+                const tokens = response.data.usage || {
+                    prompt_tokens: Math.floor(message.length / 4),
+                    completion_tokens: Math.floor(currentContext.length / 4),
+                    total_tokens: Math.floor((message.length + currentContext.length) / 4)
+                };
+                sendEvent({
+                    type: 'agent_done',
+                    agentId,
+                    index: i,
+                    result: currentContext,
+                    durationMs,
+                    tokens,
+                    timestamp: iso()
+                });
             } else {
                 throw new Error("Invalid response from Lyzr API");
             }
         }
 
-        sendEvent({ type: 'final_result', result: currentContext });
+        sendEvent({
+            type: 'final_result',
+            result: currentContext,
+            agentIds,
+            sessionId: session_id,
+            totalDurationMs: Date.now() - pipelineStartedAt,
+            timestamp: iso()
+        });
         res.write('data: [DONE]\n\n');
         res.end();
 
     } catch (error) {
         console.error("Workspace execution failed:", error.response?.data || error.message);
         const errorMessage = error.response?.data?.error || error.response?.data?.message || error.message;
-        sendEvent({ type: 'error', message: errorMessage });
+        sendEvent({ type: 'error', message: errorMessage, timestamp: iso() });
         res.write('data: [DONE]\n\n');
         res.end();
     }
