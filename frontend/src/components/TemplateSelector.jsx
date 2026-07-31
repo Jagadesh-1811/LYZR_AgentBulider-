@@ -252,9 +252,7 @@ export default function TemplateSelector({ user, onSelectScratch, onSelectTempla
           <div className="flex items-center gap-3 px-3 py-2.5 bg-violet-50 text-violet-700 font-semibold rounded-xl border border-violet-100 shadow-sm transition-all">
             <Activity size={18} /> Overview
           </div>
-          <div className="flex items-center gap-3 px-3 py-2.5 text-gray-600 font-medium rounded-xl hover:bg-gray-50 transition-colors cursor-pointer">
-            <Globe size={18} /> Settings
-          </div>
+
         </nav>
 
         <div className="pt-4 border-t border-gray-100 flex flex-col gap-3">
