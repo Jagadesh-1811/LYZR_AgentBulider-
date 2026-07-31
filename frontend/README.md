@@ -49,7 +49,7 @@ The application will be available at [http://localhost:3000](http://localhost:30
 
 ---
 
-## 🛠 Tech Stack
+##  Tech Stack
 
 - **Framework**: [Next.js](https://nextjs.org/) (React)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/)
@@ -66,7 +66,7 @@ The application will be available at [http://localhost:3000](http://localhost:30
 
 ---
 
-## 🏛 Architecture & Component Flow
+##  Architecture & Component Flow
 
 ```mermaid
 graph TD
