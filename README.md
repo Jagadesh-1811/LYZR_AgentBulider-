@@ -7,7 +7,7 @@
     <img src="https://img.shields.io/badge/Next.js-14-black?style=flat-square&logo=next.js" alt="Next.js" />
     <img src="https://img.shields.io/badge/React-18-blue?style=flat-square&logo=react" alt="React" />
     <img src="https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=flat-square&logo=tailwind-css" alt="Tailwind CSS" />
-    <img src="https://img.shields.io/badge/Lyzr_Automata-2.0-7C3AED?style=flat-square" alt="Lyzr Automata" />
+    <img src="https://img.shields.io/badge/Lyzr_Automata-2.0-7C3AED?style=flat-square&logo=probot&logoColor=white" alt="Lyzr Automata" />
   </p>
 </div>
 
