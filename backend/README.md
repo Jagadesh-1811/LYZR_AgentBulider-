@@ -48,7 +48,7 @@ The API server will typically start on [http://localhost:4000](http://localhost:
 
 ---
 
-## 🛠 Tech Stack
+##  Tech Stack
 
 - **Node.js & Express**: Core routing and REST API services.
 - **Multer**: For handling knowledge base file uploads (RAG documents).
