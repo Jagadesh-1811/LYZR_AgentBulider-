@@ -101,18 +101,24 @@ if __name__ == "__main__":
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6 items-start">
+    <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8 items-start">
       {/* Editor Section */}
-      <div className="bg-white border border-[#e5e7eb] rounded-xl overflow-hidden shadow-sm flex flex-col">
-        <div className="p-4 border-b border-[#e5e7eb] bg-[#f8fafc]">
-          <div className="font-mono text-xs text-[#374151] tracking-wider uppercase mb-1">
-            <b className="text-[#7c3aed]">Step 3</b> &middot; Editor
+      <div className="bg-[#1e1e1e] rounded-2xl overflow-hidden shadow-xl shadow-gray-200/50 flex flex-col border border-gray-200">
+        
+        {/* IDE Toolbar */}
+        <div className="px-4 py-3 bg-[#2d2d2d] border-b border-[#3c3c3c] flex items-center gap-4">
+          <div className="flex-1 flex justify-center items-center gap-6 font-mono text-xs select-none">
+            <span className="text-gray-300 font-medium bg-[#3c3c3c]/50 px-3 py-1 rounded-md">
+              agent_config.py
+            </span>
+            <span className="text-gray-600 cursor-default">
+              requirements.txt
+            </span>
           </div>
-          <h1 className="text-xl font-bold text-[#111827]">Configure the Agent</h1>
         </div>
 
-        <div className="p-6 bg-white overflow-x-auto font-mono text-sm leading-[2] text-[#374151] border-b border-[#e5e7eb]">
-          <div className="flex">
+        <div className="p-6 overflow-x-auto font-mono text-[13px] leading-relaxed text-[#d4d4d4] h-[750px] overflow-y-auto">
+          <div className="flex group">
             <div className="w-8 shrink-0 text-right pr-4 select-none text-[#9ca3af]">1</div>
             <div><span className="text-[#c586c0]">import</span> os</div>
           </div>
@@ -124,125 +130,125 @@ if __name__ == "__main__":
             <div className="w-8 shrink-0 text-right pr-4 select-none text-[#5c5c6e]">3</div>
             <div><span className="text-[#c586c0]">from</span> lyzr_automata.ai_models.{codeValues.modelName.startsWith('gemini') ? 'gemini' : 'openai'} <span className="text-[#c586c0]">import</span> {codeValues.modelName.startsWith('gemini') ? 'GeminiModel' : 'OpenAIModel'}</div>
           </div>
-          <div className="flex">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#5c5c6e]">4</div>
+          <div className="flex group">
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">4</div>
             <div></div>
           </div>
-          <div className="flex bg-[#059669]/10 rounded">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#059669]">5</div>
+          <div className="flex group hover:bg-[#2a2d2e] rounded transition-colors">
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">5</div>
             <div className="text-[#6a9955]"># Agent Setup</div>
           </div>
-          <div className="flex bg-[#059669]/10 rounded">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#059669]">6</div>
-            <div>AGENT_NAME = "<input
+          <div className="flex group hover:bg-[#2a2d2e] rounded transition-colors items-center">
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">6</div>
+            <div><span className="text-[#9cdcfe]">AGENT_NAME</span> = <span className="text-[#ce9178]">"</span><input
               type="text"
-              className="bg-[#7c3aed]/10 border-b border-[#7c3aed] text-[#7c3aed] outline-none w-48 px-1 placeholder:text-[#9ca3af]"
+              className="bg-transparent border-b border-dashed border-[#569cd6]/50 text-[#ce9178] outline-none w-48 px-1 placeholder:text-[#ce9178]/50 focus:bg-[#333333] focus:border-solid transition-all"
               placeholder="My Pirate Consultant"
               value={codeValues.agentName}
               onChange={e => handleInputChange('agentName', e.target.value)}
-            />"</div>
+            /><span className="text-[#ce9178]">"</span></div>
           </div>
-          <div className="flex bg-[#059669]/10 rounded">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#059669]">7</div>
-            <div>AGENT_DESC = "<input
+          <div className="flex group hover:bg-[#2a2d2e] rounded transition-colors items-center">
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">7</div>
+            <div><span className="text-[#9cdcfe]">AGENT_DESC</span> = <span className="text-[#ce9178]">"</span><input
               type="text"
-              className="bg-[#7c3aed]/10 border-b border-[#7c3aed] text-[#7c3aed] outline-none w-64 px-1 placeholder:text-[#9ca3af]"
+              className="bg-transparent border-b border-dashed border-[#569cd6]/50 text-[#ce9178] outline-none w-64 px-1 placeholder:text-[#ce9178]/50 focus:bg-[#333333] focus:border-solid transition-all"
               placeholder="A brief description of the agent"
               value={codeValues.description}
               onChange={e => handleInputChange('description', e.target.value)}
-            />"</div>
+            /><span className="text-[#ce9178]">"</span></div>
           </div>
-          <div className="flex">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#5c5c6e]">8</div>
+          <div className="flex group">
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">8</div>
             <div></div>
           </div>
-          <div className="flex">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#9ca3af]">9</div>
+          <div className="flex group hover:bg-[#2a2d2e] rounded transition-colors">
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">9</div>
             <div className="text-[#6a9955]"># Task 1: Configure Model</div>
           </div>
-          <div className="flex">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#9ca3af]">10</div>
-            <div>{codeValues.modelName.startsWith('gemini') ? 'gemini_model' : 'openai_model'} = <span className="text-[#dcdcaa]">{codeValues.modelName.startsWith('gemini') ? 'GeminiModel' : 'OpenAIModel'}</span>(</div>
+          <div className="flex group">
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">10</div>
+            <div>{codeValues.modelName.startsWith('gemini') ? 'gemini_model' : 'openai_model'} = <span className="text-[#4ec9b0]">{codeValues.modelName.startsWith('gemini') ? 'GeminiModel' : 'OpenAIModel'}</span>(</div>
           </div>
-          <div className="flex">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#9ca3af]">11</div>
-            <div className="pl-8">parameters={'{'}</div>
+          <div className="flex group">
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">11</div>
+            <div className="pl-8"><span className="text-[#9cdcfe]">parameters</span>={'{'}</div>
           </div>
-          <div className="flex bg-[#059669]/10 rounded">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#059669]">12</div>
-            <div className="pl-16">"model": "<select
-              className="bg-[#7c3aed]/10 border-b border-[#7c3aed] text-[#7c3aed] outline-none"
+          <div className="flex group hover:bg-[#2a2d2e] rounded transition-colors items-center">
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">12</div>
+            <div className="pl-16"><span className="text-[#ce9178]">"model"</span>: <span className="text-[#ce9178]">"</span><select
+              className="bg-[#333333] border border-[#569cd6]/30 text-[#ce9178] outline-none rounded text-xs py-0.5 px-1 focus:border-[#569cd6]"
               value={codeValues.modelName}
               onChange={e => handleInputChange('modelName', e.target.value)}
             >
-              <option value="gemini-1.5-pro" className="bg-white text-[#111827]">gemini-1.5-pro</option>
-              <option value="gemini-1.5-flash" className="bg-white text-[#111827]">gemini-1.5-flash</option>
-              <option value="gemini-2.5-pro" className="bg-white text-[#111827]">gemini-2.5-pro</option>
-              <option value="gemini-1.0-pro" className="bg-white text-[#111827]">gemini-1.0-pro</option>
-              <option value="gpt-4o" className="bg-white text-[#111827]">gpt-4o</option>
-              <option value="gpt-4-turbo" className="bg-white text-[#111827]">gpt-4-turbo</option>
-            </select>",</div>
+              <option value="gemini-1.5-pro">gemini-1.5-pro</option>
+              <option value="gemini-1.5-flash">gemini-1.5-flash</option>
+              <option value="gemini-2.5-pro">gemini-2.5-pro</option>
+              <option value="gemini-1.0-pro">gemini-1.0-pro</option>
+              <option value="gpt-4o">gpt-4o</option>
+              <option value="gpt-4-turbo">gpt-4-turbo</option>
+            </select><span className="text-[#ce9178]">"</span>,</div>
           </div>
-          <div className="flex bg-[#059669]/10 rounded">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#059669]">13</div>
-            <div className="pl-16">"temperature": <input
+          <div className="flex group hover:bg-[#2a2d2e] rounded transition-colors items-center">
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">13</div>
+            <div className="pl-16"><span className="text-[#ce9178]">"temperature"</span>: <input
               type="number"
               step="0.1"
               min="0"
               max="1"
-              className="bg-[#7c3aed]/10 border-b border-[#7c3aed] text-[#7c3aed] outline-none w-16 px-1"
+              className="bg-transparent border-b border-dashed border-[#569cd6]/50 text-[#b5cea8] outline-none w-16 px-1 focus:bg-[#333333] focus:border-solid transition-all"
               value={codeValues.temperature}
               onChange={e => handleInputChange('temperature', e.target.value)}
             />,</div>
           </div>
-          <div className="flex bg-[#059669]/10 rounded">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#059669]">14</div>
-            <div className="pl-16">"max_tokens": <input
+          <div className="flex group hover:bg-[#2a2d2e] rounded transition-colors items-center">
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">14</div>
+            <div className="pl-16"><span className="text-[#ce9178]">"max_tokens"</span>: <input
               type="number"
-              className="bg-[#7c3aed]/10 border-b border-[#7c3aed] text-[#7c3aed] outline-none w-20 px-1"
+              className="bg-transparent border-b border-dashed border-[#569cd6]/50 text-[#b5cea8] outline-none w-20 px-1 focus:bg-[#333333] focus:border-solid transition-all"
               value={codeValues.maxTokens}
               onChange={e => handleInputChange('maxTokens', e.target.value)}
             />,</div>
           </div>
-          <div className="flex">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#9ca3af]">15</div>
+          <div className="flex group">
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">15</div>
             <div className="pl-8">{'}'}</div>
           </div>
-          <div className="flex">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#9ca3af]">16</div>
+          <div className="flex group">
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">16</div>
             <div>)</div>
           </div>
-          <div className="flex">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#9ca3af]">17</div>
+          <div className="flex group">
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">17</div>
             <div></div>
           </div>
-          <div className="flex">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#9ca3af]">18</div>
+          <div className="flex group hover:bg-[#2a2d2e] rounded transition-colors">
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">18</div>
             <div className="text-[#6a9955]"># Task 2: Configure Agent</div>
           </div>
-          <div className="flex">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#9ca3af]">19</div>
-            <div>expert_agent = <span className="text-[#dcdcaa]">Agent</span>(</div>
+          <div className="flex group">
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">19</div>
+            <div><span className="text-[#9cdcfe]">expert_agent</span> = <span className="text-[#4ec9b0]">Agent</span>(</div>
           </div>
-          <div className="flex bg-[#059669]/10 rounded">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#059669]">20</div>
-            <div className="pl-8">role="<input
+          <div className="flex group hover:bg-[#2a2d2e] rounded transition-colors items-center">
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">20</div>
+            <div className="pl-8"><span className="text-[#9cdcfe]">role</span>=<span className="text-[#ce9178]">"</span><input
               type="text"
-              className="bg-[#7c3aed]/10 border-b border-[#7c3aed] text-[#7c3aed] outline-none w-48 px-1 placeholder:text-[#9ca3af]"
+              className="bg-transparent border-b border-dashed border-[#569cd6]/50 text-[#ce9178] outline-none w-48 px-1 placeholder:text-[#ce9178]/50 focus:bg-[#333333] focus:border-solid transition-all"
               placeholder="Expert Consultant"
               value={codeValues.role}
               onChange={e => handleInputChange('role', e.target.value)}
-            />",</div>
+            /><span className="text-[#ce9178]">"</span>,</div>
           </div>
-          <div className="flex bg-[#059669]/10 rounded">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#059669]">21</div>
-            <div className="pl-8">prompt_persona="<input
+          <div className="flex group hover:bg-[#2a2d2e] rounded transition-colors items-center">
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">21</div>
+            <div className="pl-8"><span className="text-[#9cdcfe]">prompt_persona</span>=<span className="text-[#ce9178]">"""</span><input
               type="text"
-              className="bg-[#7c3aed]/10 border-b border-[#7c3aed] text-[#7c3aed] outline-none w-96 px-1 placeholder:text-[#9ca3af]"
+              className="bg-transparent border-b border-dashed border-[#569cd6]/50 text-[#ce9178] outline-none w-[360px] px-1 placeholder:text-[#ce9178]/50 focus:bg-[#333333] focus:border-solid transition-all"
               placeholder="You are an expert consultant..."
               value={codeValues.persona}
               onChange={e => handleInputChange('persona', e.target.value)}
-            />"</div>
+            /><span className="text-[#ce9178]">"""</span></div>
           </div>
           <div className="flex">
             <div className="w-8 shrink-0 text-right pr-4 select-none text-[#9ca3af]">22</div>
@@ -297,66 +303,79 @@ if __name__ == "__main__":
 
       {/* Checklist / Sidebar */}
       <div className="flex flex-col gap-6">
-        <div className="bg-[#f8fafc] border border-[#e5e7eb] rounded-xl p-6 shadow-sm">
-          <h3 className="font-bold mb-4 uppercase text-xs tracking-wider text-[#374151]">Mission Checklist</h3>
-          <div className="space-y-3 text-sm">
+        
+        {/* Step Info Header */}
+        <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+          <div className="font-mono text-[10px] font-bold text-gray-500 tracking-wider uppercase mb-2">
+            <span className="text-violet-600 bg-violet-50 px-2 py-1 rounded">Step 1</span> &middot; Configuration
+          </div>
+          <h1 className="text-xl font-extrabold text-gray-900 tracking-tight">Configure the Agent</h1>
+          <p className="text-sm text-gray-500 mt-1">Fill out the highlighted code fields to define your agent's behavior.</p>
+        </div>
+
+        <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+          <h3 className="font-bold mb-4 uppercase text-[11px] tracking-wider text-gray-400">Mission Checklist</h3>
+          <div className="space-y-3.5 text-sm">
 
             <div className="flex items-center gap-3">
-              <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${checklist.agentName ? 'bg-[#059669] border-[#059669] text-white' : 'border-[#9ca3af] text-transparent'}`}>
-                {checklist.agentName && ''}
+              <div className={`w-5 h-5 rounded-full flex items-center justify-center transition-all duration-300 ${checklist.agentName ? 'bg-emerald-500 text-white shadow-sm' : 'bg-gray-100 text-transparent'}`}>
+                {checklist.agentName && <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>}
               </div>
-              <span className={checklist.agentName ? 'text-[#111827]' : 'text-[#374151]'}>Set Agent Name</span>
+              <span className={`font-semibold ${checklist.agentName ? 'text-gray-900' : 'text-gray-500'}`}>Set Agent Name</span>
             </div>
 
             <div className="flex items-center gap-3">
-              <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${checklist.description ? 'bg-[#059669] border-[#059669] text-white' : 'border-[#9ca3af] text-transparent'}`}>
-                {checklist.description && ''}
+              <div className={`w-5 h-5 rounded-full flex items-center justify-center transition-all duration-300 ${checklist.description ? 'bg-emerald-500 text-white shadow-sm' : 'bg-gray-100 text-transparent'}`}>
+                {checklist.description && <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>}
               </div>
-              <span className={checklist.description ? 'text-[#111827]' : 'text-[#374151]'}>Set Description</span>
+              <span className={`font-semibold ${checklist.description ? 'text-gray-900' : 'text-gray-500'}`}>Set Description</span>
             </div>
 
             <div className="flex items-center gap-3">
-              <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${checklist.modelName ? 'bg-[#059669] border-[#059669] text-white' : 'border-[#9ca3af] text-transparent'}`}>
-                {checklist.modelName && ''}
+              <div className={`w-5 h-5 rounded-full flex items-center justify-center transition-all duration-300 ${checklist.modelName ? 'bg-emerald-500 text-white shadow-sm' : 'bg-gray-100 text-transparent'}`}>
+                {checklist.modelName && <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>}
               </div>
-              <span className={checklist.modelName ? 'text-[#111827]' : 'text-[#374151]'}>Select Model</span>
+              <span className={`font-semibold ${checklist.modelName ? 'text-gray-900' : 'text-gray-500'}`}>Select Model</span>
             </div>
 
             <div className="flex items-center gap-3">
-              <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${checklist.persona ? 'bg-[#059669] border-[#059669] text-white' : 'border-[#9ca3af] text-transparent'}`}>
-                {checklist.persona && ''}
+              <div className={`w-5 h-5 rounded-full flex items-center justify-center transition-all duration-300 ${checklist.persona ? 'bg-emerald-500 text-white shadow-sm' : 'bg-gray-100 text-transparent'}`}>
+                {checklist.persona && <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>}
               </div>
-              <span className={checklist.persona ? 'text-[#111827]' : 'text-[#374151]'}>Define Persona</span>
+              <span className={`font-semibold ${checklist.persona ? 'text-gray-900' : 'text-gray-500'}`}>Define Persona</span>
             </div>
 
           </div>
         </div>
 
-        <div className="bg-[#f8fafc] border border-[#e5e7eb] rounded-xl p-6 shadow-sm">
-          <h3 className="font-bold mb-4 uppercase text-xs tracking-wider text-[#374151]">Capabilities & Tools</h3>
+        <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+          <h3 className="font-bold mb-4 uppercase text-[11px] tracking-wider text-gray-400">Capabilities & Tools</h3>
           <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <input 
-                type="checkbox" 
-                id="enableDb" 
-                className="w-4 h-4 text-[#059669] rounded focus:ring-[#059669] cursor-pointer"
-                checked={codeValues.enableDatabase}
-                onChange={e => handleInputChange('enableDatabase', e.target.checked)}
-              />
-              <label htmlFor="enableDb" className="text-sm font-medium text-[#111827] cursor-pointer">
+            <div className="flex items-center gap-3">
+              <div className="relative flex items-center justify-center">
+                <input 
+                  type="checkbox" 
+                  id="enableDb" 
+                  className="peer appearance-none w-5 h-5 border-2 border-gray-200 rounded-md checked:bg-violet-600 checked:border-violet-600 transition-colors cursor-pointer"
+                  checked={codeValues.enableDatabase}
+                  onChange={e => handleInputChange('enableDatabase', e.target.checked)}
+                />
+                <svg className="absolute w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </div>
+              <label htmlFor="enableDb" className="text-sm font-semibold text-gray-700 cursor-pointer select-none">
                 Enable Database Tool
               </label>
             </div>
             
             {codeValues.enableDatabase && (
-              <div className="pl-6 animate-in slide-in-from-top-2 duration-200">
-                <label className="block text-xs font-semibold text-[#374151] mb-1">
+              <div className="pl-8 animate-in slide-in-from-top-2 duration-200">
+                <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">
                   Connection String
                 </label>
                 <input
                   type="text"
                   placeholder="postgresql://user:pass@localhost:5432/db"
-                  className="w-full px-3 py-2 text-xs border border-[#d1d5db] rounded outline-none focus:border-[#7c3aed]"
+                  className="w-full px-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-lg outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-all"
                   value={codeValues.dbConnectionString}
                   onChange={e => handleInputChange('dbConnectionString', e.target.value)}
                 />
@@ -368,7 +387,7 @@ if __name__ == "__main__":
         <button
           disabled={!isComplete}
           onClick={() => onComplete(generateCode(), codeValues)}
-          className={`font-semibold py-3 px-6 rounded-lg transition-colors w-full ${isComplete ? 'bg-[#7c3aed] hover:bg-[#a78bfa] text-white shadow-sm' : 'bg-[#e5e7eb] text-[#9ca3af] cursor-not-allowed'}`}
+          className={`font-bold py-3.5 px-6 rounded-xl transition-all duration-200 w-full flex items-center justify-center gap-2 ${isComplete ? 'bg-violet-600 hover:bg-violet-700 text-white shadow-md hover:shadow-lg hover:-translate-y-0.5' : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
         >
           {isComplete ? 'Next: RAG Setup →' : 'Complete checklist to continue'}
         </button>

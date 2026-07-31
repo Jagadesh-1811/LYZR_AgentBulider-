@@ -21,34 +21,33 @@ export function DeveloperTutorial({ mode, templateConfig, onComplete, onCancel }
     <div className="flex flex-col w-full min-h-screen bg-white text-[#374151] font-sans">
 
       {/* ── Tutorial Header ─────────────────────────────────────────── */}
-      <div className="flex items-center justify-between p-6 border-b border-[#e5e7eb] bg-white">
-        <div className="flex items-center gap-4">
-          <div className="flex flex-col ml-4">
-            <h1 className="text-xl font-bold">
-              {mode === 'scratch' ? 'Start from Scratch' : `Template: ${templateConfig?.name || 'Agent'}`}
-            </h1>
-            <p className="text-[#9494a6] text-xs font-mono mt-1">
-              Lyzr Automata SDK Interactive Tutorial
-            </p>
-          </div>
+      <div className="flex flex-col items-center gap-4 p-6 border-b border-[#e5e7eb] bg-white">
+        <div className="flex flex-col text-center">
+          <h1 className="text-xl font-bold">
+            {mode === 'scratch' ? 'Start from Scratch' : `Template: ${templateConfig?.name || 'Agent'}`}
+          </h1>
+          <p className="text-[#9494a6] text-xs font-mono mt-1">
+            Lyzr Automata SDK Interactive Tutorial
+          </p>
         </div>
 
         {/* Step progress pills */}
-        <div className="flex items-center gap-2 flex-wrap justify-end">
+        <div className="flex items-center gap-2 flex-wrap justify-center mt-2">
           {SCREENS.map((screen, idx) => {
             const isActive = currentScreen === screen;
             const isDone   = currentIdx > idx;
             return (
-              <div
+              <button
                 key={screen}
-                className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold transition-all"
+                onClick={() => setCurrentScreen(screen)}
+                className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer hover:opacity-80"
                 style={{
                   backgroundColor: isActive ? '#7c3aed' : isDone ? '#059669' : '#f3f4f6',
                   color: (isActive || isDone) ? '#ffffff' : '#6b7280',
                 }}
               >
                 {LABELS[idx]}
-              </div>
+              </button>
             );
           })}
         </div>
@@ -56,7 +55,7 @@ export function DeveloperTutorial({ mode, templateConfig, onComplete, onCancel }
 
       {/* ── Screen ──────────────────────────────────────────────────── */}
       <div className="flex-1 overflow-auto p-8 flex justify-center">
-        <div className="w-full max-w-5xl">
+        <div className="w-full max-w-6xl">
 
           {currentScreen === 'setup' && (
             <ProjectSetup mode={mode} onNext={() => setCurrentScreen('overview')} />

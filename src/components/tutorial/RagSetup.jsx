@@ -79,258 +79,256 @@ if __name__ == "__main__":
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6 items-start">
-
+    <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8 items-start">
       {/* ── Code Editor Panel ─────────────────────────────────────── */}
-      <div className="bg-white border border-[#e5e7eb] rounded-xl overflow-hidden shadow-sm flex flex-col">
-        <div className="p-4 border-b border-[#e5e7eb] bg-[#f8fafc]">
-          <div className="font-mono text-xs text-[#374151] tracking-wider uppercase mb-1">
-            <b className="text-[#7c3aed]">Step 4</b> &middot; RAG Setup
+      <div className="bg-[#1e1e1e] rounded-2xl overflow-hidden shadow-xl shadow-gray-200/50 flex flex-col border border-gray-200">
+        
+        {/* IDE Toolbar */}
+        <div className="px-4 py-3 bg-[#2d2d2d] border-b border-[#3c3c3c] flex items-center gap-4">
+          <div className="flex-1 flex justify-center items-center gap-6 font-mono text-xs select-none">
+            <span className="text-gray-300 font-medium bg-[#3c3c3c]/50 px-3 py-1 rounded-md">
+              rag_config.py
+            </span>
+            <span className="text-gray-600 cursor-default">
+              requirements.txt
+            </span>
           </div>
-          <h1 className="text-xl font-bold text-[#111827]">Configure Knowledge Base</h1>
-          <p className="text-sm text-[#6b7280] mt-1">
-            Optionally attach a URL and / or paste text so your agent retrieves domain-specific knowledge before responding.
-          </p>
         </div>
 
-        <div className="p-6 bg-white overflow-x-auto font-mono text-sm leading-[2] text-[#111827] border-b border-[#e5e7eb]">
+        <div className="p-6 overflow-x-auto font-mono text-[13px] leading-relaxed text-[#d4d4d4] h-[750px] overflow-y-auto">
 
           {/* Context lines */}
           <div className="flex">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#9ca3af]">1</div>
-            <div><span className="text-[#2563eb]">import</span> os</div>
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">1</div>
+            <div><span className="text-[#c586c0]">import</span> os</div>
+          </div>
+          <div className="flex mt-2">
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">4</div>
+            <div className="text-[#6a9955]"># Agent Setup</div>
           </div>
           <div className="flex">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#9ca3af]">4</div>
-            <div className="text-[#15803d]"># Agent Setup</div>
-          </div>
-          <div className="flex">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#9ca3af]">5</div>
-            <div>AGENT_NAME = <span className="text-[#b91c1c]">"{codeValues?.agentName || 'My Agent'}"</span></div>
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">5</div>
+            <div><span className="text-[#9cdcfe]">AGENT_NAME</span> = <span className="text-[#ce9178]">"{codeValues?.agentName || 'My Agent'}"</span></div>
           </div>
 
           {/* RAG_URL line */}
-          <div className={`flex rounded transition-all duration-200 ${hasUrl ? 'bg-[#f3f4f6]' : ''}`}>
-            <div className={`w-8 shrink-0 text-right pr-4 select-none font-bold text-[#9ca3af]`}>6</div>
+          <div className={`flex rounded transition-all duration-200 items-center ${hasUrl ? 'bg-[#2a2d2e]' : 'group hover:bg-[#2a2d2e]'}`}>
+            <div className={`w-8 shrink-0 text-right pr-4 select-none ${hasUrl ? 'font-bold text-[#858585]' : 'text-[#858585]'}`}>6</div>
             <div>
-              <span>RAG_URL</span> = <span className="text-[#b91c1c]">"</span>
+              <span className="text-[#9cdcfe]">RAG_URL</span> = <span className="text-[#ce9178]">"</span>
               <input
                 type="text"
                 disabled={!enableRag}
-                className={`border-b outline-none px-1 transition-all ${
+                className={`bg-transparent border-b outline-none px-1 transition-all focus:bg-[#333333] ${
                   enableRag
-                    ? 'bg-transparent border-[#9ca3af] text-[#111827] w-56'
-                    : 'bg-transparent border-[#d1d5db] text-[#9ca3af] w-40 cursor-not-allowed'
+                    ? 'border-dashed border-[#569cd6]/50 text-[#ce9178] w-56'
+                    : 'border-transparent text-[#ce9178]/50 w-40 cursor-not-allowed'
                 }`}
                 placeholder="https://docs.lyzr.ai/"
                 value={ragUrl}
                 onChange={e => setRagUrl(e.target.value)}
               />
-              <span className="text-[#b91c1c]">"</span>
+              <span className="text-[#ce9178]">"</span>
             </div>
           </div>
 
           {/* RAG_TEXT line */}
-          <div className={`flex rounded transition-all duration-200 ${hasText ? 'bg-[#f3f4f6]' : ''}`}>
-            <div className={`w-8 shrink-0 text-right pr-4 select-none font-bold text-[#9ca3af]`}>7</div>
+          <div className={`flex rounded transition-all duration-200 items-center ${hasText ? 'bg-[#2a2d2e]' : 'group hover:bg-[#2a2d2e]'}`}>
+            <div className={`w-8 shrink-0 text-right pr-4 select-none ${hasText ? 'font-bold text-[#858585]' : 'text-[#858585]'}`}>7</div>
             <div>
-              <span>RAG_TEXT</span> = <span className="text-[#b91c1c]">"""</span>
-              <span className={`px-1 italic text-xs ${hasText ? 'text-[#111827]' : 'text-[#9ca3af]'}`}>
+              <span className="text-[#9cdcfe]">RAG_TEXT</span> = <span className="text-[#ce9178]">"""</span>
+              <span className={`px-1 italic text-xs ${hasText ? 'text-[#ce9178]' : 'text-[#858585]'}`}>
                 {hasText ? `${ragText.slice(0, 40)}${ragText.length > 40 ? '…' : ''}` : 'your pasted knowledge here'}
               </span>
-              <span className="text-[#b91c1c]">"""</span>
+              <span className="text-[#ce9178]">"""</span>
             </div>
           </div>
 
           {/* RAG_FILE line */}
-          <div className={`flex rounded transition-all duration-200 ${hasFile ? 'bg-[#f3f4f6]' : ''}`}>
-            <div className={`w-8 shrink-0 text-right pr-4 select-none font-bold text-[#9ca3af]`}>8</div>
+          <div className={`flex rounded transition-all duration-200 items-center ${hasFile ? 'bg-[#2a2d2e]' : 'group hover:bg-[#2a2d2e]'}`}>
+            <div className={`w-8 shrink-0 text-right pr-4 select-none ${hasFile ? 'font-bold text-[#858585]' : 'text-[#858585]'}`}>8</div>
             <div>
-              <span>RAG_FILE</span> = <span className="text-[#b91c1c]">"</span>
-              <span className={`px-1 italic text-xs ${hasFile ? 'text-[#111827]' : 'text-[#9ca3af]'}`}>
+              <span className="text-[#9cdcfe]">RAG_FILE</span> = <span className="text-[#ce9178]">"</span>
+              <span className={`px-1 italic text-xs ${hasFile ? 'text-[#ce9178]' : 'text-[#858585]'}`}>
                 {hasFile ? ragFile.name : 'your uploaded file here'}
               </span>
-              <span className="text-[#b91c1c]">"</span>
+              <span className="text-[#ce9178]">"</span>
             </div>
           </div>
 
           {/* Expanded Task 1 and Task 2 config */}
-          <div className="flex mt-2 text-[#15803d]">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#9ca3af]">9</div>
-            <div># Task 1: Configure Model</div>
+          <div className="flex mt-2">
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">9</div>
+            <div className="text-[#6a9955]"># Task 1: Configure Model</div>
           </div>
           <div className="flex">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#9ca3af]">9</div>
-            <div>gemini_model = GeminiModel(</div>
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">10</div>
+            <div>gemini_model = <span className="text-[#4ec9b0]">GeminiModel</span>(</div>
           </div>
           <div className="flex">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#9ca3af]">10</div>
-            <div className="pl-4">parameters={'{'}</div>
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">11</div>
+            <div className="pl-4"><span className="text-[#9cdcfe]">parameters</span>={'{'}</div>
           </div>
           <div className="flex">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#9ca3af]">11</div>
-            <div className="pl-8"><span className="text-[#b91c1c]">"model"</span>: <span className="text-[#b91c1c]">"{codeValues?.modelName || 'gemini-1.5-pro'}"</span>,</div>
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">12</div>
+            <div className="pl-8"><span className="text-[#ce9178]">"model"</span>: <span className="text-[#ce9178]">"{codeValues?.modelName || 'gemini-1.5-pro'}"</span>,</div>
           </div>
           <div className="flex">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#9ca3af]">12</div>
-            <div className="pl-8"><span className="text-[#b91c1c]">"temperature"</span>: {codeValues?.temperature || 0.2},</div>
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">13</div>
+            <div className="pl-8"><span className="text-[#ce9178]">"temperature"</span>: <span className="text-[#b5cea8]">{codeValues?.temperature || 0.2}</span>,</div>
           </div>
           <div className="flex">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#9ca3af]">13</div>
-            <div className="pl-8"><span className="text-[#b91c1c]">"max_tokens"</span>: {codeValues?.maxTokens || 1500},</div>
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">14</div>
+            <div className="pl-8"><span className="text-[#ce9178]">"max_tokens"</span>: <span className="text-[#b5cea8]">{codeValues?.maxTokens || 1500}</span>,</div>
           </div>
           <div className="flex">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#9ca3af]">14</div>
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">15</div>
             <div className="pl-4">{'}'},</div>
           </div>
           <div className="flex">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#9ca3af]">15</div>
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">16</div>
             <div>)</div>
           </div>
-          <div className="flex mt-2 text-[#15803d]">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#9ca3af]">16</div>
-            <div># Task 2: Configure Agent</div>
+          <div className="flex mt-2">
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">17</div>
+            <div className="text-[#6a9955]"># Task 2: Configure Agent</div>
           </div>
           <div className="flex">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#9ca3af]">17</div>
-            <div>{agentVar} = Agent(</div>
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">18</div>
+            <div><span className="text-[#9cdcfe]">{agentVar}</span> = <span className="text-[#4ec9b0]">Agent</span>(</div>
           </div>
           <div className="flex">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#9ca3af]">18</div>
-            <div className="pl-4">role=<span className="text-[#b91c1c]">"{codeValues?.role || 'Expert Consultant'}"</span>,</div>
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">19</div>
+            <div className="pl-4"><span className="text-[#9cdcfe]">role</span>=<span className="text-[#ce9178]">"{codeValues?.role || 'Expert Consultant'}"</span>,</div>
           </div>
           <div className="flex">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#9ca3af]">19</div>
-            <div className="pl-4">prompt_persona=<span className="text-[#b91c1c]">"{codeValues?.persona || ''}"</span></div>
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">20</div>
+            <div className="pl-4"><span className="text-[#9cdcfe]">prompt_persona</span>=<span className="text-[#ce9178]">"{codeValues?.persona || ''}"</span></div>
           </div>
           <div className="flex">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#9ca3af]">20</div>
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">21</div>
             <div>)</div>
           </div>
-          <div className="flex mt-2 text-[#15803d]">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#9ca3af]">21</div>
-            <div># Task 3: Chat Loop</div>
+          <div className="flex mt-2">
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">22</div>
+            <div className="text-[#6a9955]"># Task 3: Chat Loop</div>
           </div>
-          <div className="flex text-[#9ca3af] italic">
+          <div className="flex text-[#858585] italic">
             <div className="w-8 shrink-0 text-right pr-4 select-none">·</div>
             <div>...</div>
           </div>
           <div className="flex">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#9ca3af]">27</div>
-            <div className="pl-8">task = Task(</div>
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">28</div>
+            <div className="pl-8">task = <span className="text-[#4ec9b0]">Task</span>(</div>
           </div>
 
           {/* instructions line */}
-          <div className={`flex rounded transition-all duration-200 ${enableRag ? 'bg-[#f3f4f6]' : ''}`}>
-            <div className={`w-8 shrink-0 text-right pr-4 select-none text-[#9ca3af]`}>28</div>
+          <div className={`flex rounded transition-all duration-200 ${enableRag ? 'bg-[#2a2d2e]' : ''}`}>
+            <div className={`w-8 shrink-0 text-right pr-4 select-none text-[#858585]`}>29</div>
             <div className="pl-12 text-xs">
-              <span>instructions</span>=
+              <span className="text-[#9cdcfe]">instructions</span>=
               {enableRag ? (
                 hasUrl && hasText ? (
-                  <span className="text-[#b91c1c]"> f"Context URL: {'{'}RAG_URL{'}'} + Text: {'{'}RAG_TEXT[:300]{'}'} Query: {'{'}user_input{'}'}"</span>
+                  <span className="text-[#ce9178]"> f"Context URL: {'{'}RAG_URL{'}'} + Text: {'{'}RAG_TEXT[:300]{'}'} Query: {'{'}user_input{'}'}"</span>
                 ) : hasUrl ? (
-                  <span className="text-[#b91c1c]"> f"Use context from {'{'}RAG_URL{'}'} to answer: {'{'}user_input{'}'}"</span>
+                  <span className="text-[#ce9178]"> f"Use context from {'{'}RAG_URL{'}'} to answer: {'{'}user_input{'}'}"</span>
                 ) : hasText ? (
-                  <span className="text-[#b91c1c]"> f"Use knowledge: {'{'}RAG_TEXT[:300]{'}'} Answer: {'{'}user_input{'}'}"</span>
+                  <span className="text-[#ce9178]"> f"Use knowledge: {'{'}RAG_TEXT[:300]{'}'} Answer: {'{'}user_input{'}'}"</span>
                 ) : (
-                  <span className="text-[#b91c1c]"> f"Answer the user's query: {'{'}user_input{'}'}"</span>
+                  <span className="text-[#ce9178]"> f"Answer the user's query: {'{'}user_input{'}'}"</span>
                 )
               ) : (
-                <span className="text-[#b91c1c]"> f"Answer the user's query: {'{'}user_input{'}'}"</span>
+                <span className="text-[#ce9178]"> f"Answer the user's query: {'{'}user_input{'}'}"</span>
               )}
               ,
             </div>
           </div>
 
-          <div className="flex text-[#15803d]">
-            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#9ca3af]">·</div>
+          <div className="flex text-[#6a9955]">
+            <div className="w-8 shrink-0 text-right pr-4 select-none text-[#858585]">·</div>
             <div>··· # pipeline.run() — rest of chat loop ···</div>
           </div>
         </div>
       </div>
 
       {/* ── Right Sidebar ─────────────────────────────────────────── */}
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-6">
+
+        {/* Step Info Header */}
+        <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+          <div className="font-mono text-[10px] font-bold text-gray-500 tracking-wider uppercase mb-2">
+            <span className="text-violet-600 bg-violet-50 px-2 py-1 rounded">Step 2</span> &middot; RAG Setup
+          </div>
+          <h1 className="text-xl font-extrabold text-gray-900 tracking-tight">Knowledge Base</h1>
+          <p className="text-sm text-gray-500 mt-1">Provide domain-specific knowledge to ground your agent's responses.</p>
+        </div>
 
         {/* RAG Enable toggle */}
-        <div className="bg-[#f8fafc] border border-[#e5e7eb] rounded-xl p-5 shadow-sm">
-          <h3 className="font-bold mb-1 uppercase text-xs tracking-wider text-[#374151]">Knowledge Base (RAG)</h3>
-          <p className="text-xs text-[#6b7280] mb-4 leading-relaxed">
-            Attach a URL, paste text, or both. Your agent will use this context to answer domain-specific questions.
-          </p>
+        <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+          <h3 className="font-bold mb-4 uppercase text-[11px] tracking-wider text-gray-400">RAG Configuration</h3>
 
           {/* Toggle */}
           <div
             onClick={() => setEnableRag(v => !v)}
-            className="flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-all duration-200 mb-4 select-none"
-            style={{ borderColor: enableRag ? '#7c3aed' : '#e5e7eb', backgroundColor: enableRag ? '#f3f0ff' : '#ffffff' }}
+            className={`flex items-center justify-between p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 mb-5 select-none ${enableRag ? 'border-violet-500 bg-violet-50' : 'border-gray-100 bg-gray-50 hover:border-gray-200'}`}
           >
-            <span className="text-sm font-semibold" style={{ color: enableRag ? '#7c3aed' : '#6b7280' }}>
-              {enableRag ? ' RAG Enabled' : 'Enable RAG'}
+            <span className={`text-sm font-bold ${enableRag ? 'text-violet-700' : 'text-gray-600'}`}>
+              {enableRag ? 'RAG Enabled' : 'Enable RAG'}
             </span>
-            <div
-              className="relative w-10 h-5 rounded-full transition-colors duration-200 shrink-0"
-              style={{ backgroundColor: enableRag ? '#7c3aed' : '#d1d5db' }}
-            >
+            <div className={`relative w-12 h-6 rounded-full transition-colors duration-200 shrink-0 ${enableRag ? 'bg-violet-600' : 'bg-gray-300'}`}>
               <div
-                className="absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform duration-200"
-                style={{ transform: enableRag ? 'translateX(20px)' : 'translateX(2px)' }}
+                className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow-sm transition-transform duration-200 ${enableRag ? 'translate-x-7' : 'translate-x-1'}`}
               />
             </div>
           </div>
 
           {enableRag && (
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-5 animate-in slide-in-from-top-2 duration-200">
 
               {/* URL Input */}
               <div>
-                <label className="text-xs font-semibold text-[#374151] block mb-1 flex items-center gap-1">
-                  <span className="text-[#7c3aed]"></span> Knowledge Base URL
+                <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider block mb-1.5">
+                   Knowledge Base URL
                 </label>
                 <input
                   type="text"
-                  className="w-full px-3 py-2 text-xs border border-[#ddd6fe] rounded-lg bg-white outline-none"
-                  onFocus={e => e.target.style.borderColor = '#7c3aed'}
-                  onBlur={e => e.target.style.borderColor = '#ddd6fe'}
+                  className="w-full px-3.5 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-lg outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-all"
                   placeholder="https://docs.lyzr.ai/"
                   value={ragUrl}
                   onChange={e => setRagUrl(e.target.value)}
                 />
-                <p className="text-xs text-[#9ca3af] mt-1">Agent fetches content from this URL at query time.</p>
+                <p className="text-xs text-gray-400 mt-1.5 font-medium">Agent fetches content from this URL at query time.</p>
               </div>
 
               {/* Divider */}
-              <div className="flex items-center gap-2">
-                <div className="flex-1 h-px bg-[#e5e7eb]" />
-                <span className="text-xs font-semibold text-[#9ca3af]">and / or</span>
-                <div className="flex-1 h-px bg-[#e5e7eb]" />
+              <div className="flex items-center gap-3">
+                <div className="flex-1 h-px bg-gray-100" />
+                <span className="text-[10px] font-bold uppercase tracking-wider text-gray-300">and / or</span>
+                <div className="flex-1 h-px bg-gray-100" />
               </div>
 
               {/* Text Input */}
               <div>
-                <label className="text-xs font-semibold text-[#374151] block mb-1 flex items-center gap-1">
-                  <span className="text-[#059669]"></span> Paste Text Content
+                <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider block mb-1.5">
+                   Paste Text Content
                 </label>
                 <textarea
-                  rows={5}
-                  className="w-full px-3 py-2 text-xs border border-[#bbf7d0] rounded-lg bg-white outline-none resize-none leading-relaxed"
-                  onFocus={e => e.target.style.borderColor = '#059669'}
-                  onBlur={e => e.target.style.borderColor = '#bbf7d0'}
+                  rows={4}
+                  className="w-full px-3.5 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-lg outline-none resize-none leading-relaxed focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-all"
                   placeholder="Paste any document excerpt, FAQ, product docs, or knowledge content here..."
                   value={ragText}
                   onChange={e => setRagText(e.target.value)}
                 />
-                <p className="text-xs text-[#9ca3af] mt-1">Inline text is embedded directly in the agent's context.</p>
               </div>
 
               {/* File Input */}
               <div>
-                <label className="text-xs font-semibold text-[#374151] block mb-1 flex items-center gap-1">
-                  <span className="text-[#ea580c]"></span> Upload Document (PDF/TXT)
+                <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider block mb-1.5">
+                   Upload Document
                 </label>
-                <div className="flex items-center gap-2">
-                  <label className="cursor-pointer border border-[#fdba74] bg-[#fff7ed] hover:bg-[#ffedd5] px-4 py-2 rounded-lg text-xs text-[#c2410c] font-semibold transition-colors">
-                    {ragFile ? 'Change File' : 'Choose File'}
+                <div className="flex items-center gap-3">
+                  <label className="cursor-pointer border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-violet-50 hover:border-violet-300 px-5 py-2.5 rounded-lg text-xs font-bold text-gray-600 hover:text-violet-700 transition-all">
+                    {ragFile ? 'Change File' : 'Choose File (PDF/TXT)'}
                     <input 
                       type="file" 
                       accept=".pdf,.txt"
@@ -342,13 +340,13 @@ if __name__ == "__main__":
                       }}
                     />
                   </label>
-                  <span className="text-xs text-[#6b7280] truncate max-w-[150px]">
+                  <span className="text-xs text-gray-500 font-medium truncate max-w-[120px]">
                     {ragFile ? ragFile.name : 'No file chosen'}
                   </span>
                   {ragFile && (
                     <button 
                       onClick={() => setRagFile(null)}
-                      className="text-xs text-[#ef4444] hover:underline"
+                      className="text-xs font-bold text-red-500 hover:text-red-700 hover:underline"
                     >
                       Clear
                     </button>
@@ -357,16 +355,16 @@ if __name__ == "__main__":
               </div>
 
               {/* Advanced RAG Settings */}
-              <div style={{ marginTop: "12px", paddingTop: "12px", borderTop: "1px dashed #e5e7eb" }}>
-                <h4 className="text-[10px] font-bold text-[#6b7280] uppercase tracking-wider mb-3">Advanced Settings</h4>
+              <div className="mt-2 pt-5 border-t border-gray-100">
+                <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-4">Advanced Vector Store Settings</h4>
                 
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-4">
                   <div>
-                    <label className="text-xs font-semibold text-[#374151] block mb-1">Vector Store Provider</label>
+                    <label className="text-[11px] font-bold text-gray-500 block mb-1.5">Provider</label>
                     <select
                       value={vectorStore}
                       onChange={e => setVectorStore(e.target.value)}
-                      className="w-full px-3 py-2 text-xs border border-[#d1d5db] rounded-lg bg-white outline-none cursor-pointer"
+                      className="w-full px-3.5 py-2 text-sm bg-gray-50 border border-gray-200 rounded-lg outline-none cursor-pointer focus:border-violet-500 transition-colors"
                     >
                       <option value="pinecone">Pinecone</option>
                       <option value="qdrant">Qdrant</option>
@@ -375,11 +373,11 @@ if __name__ == "__main__":
                   </div>
                   
                   <div>
-                    <label className="text-xs font-semibold text-[#374151] block mb-1">Embedding Model</label>
+                    <label className="text-[11px] font-bold text-gray-500 block mb-1.5">Embedding Model</label>
                     <select
                       value={embeddingModel}
                       onChange={e => setEmbeddingModel(e.target.value)}
-                      className="w-full px-3 py-2 text-xs border border-[#d1d5db] rounded-lg bg-white outline-none cursor-pointer"
+                      className="w-full px-3.5 py-2 text-sm bg-gray-50 border border-gray-200 rounded-lg outline-none cursor-pointer focus:border-violet-500 transition-colors"
                     >
                       <option value="text-embedding-3-small">text-embedding-3-small</option>
                       <option value="text-embedding-3-large">text-embedding-3-large</option>
@@ -392,31 +390,27 @@ if __name__ == "__main__":
           )}
 
           {!enableRag && (
-            <p className="text-xs text-[#9ca3af] leading-relaxed">
-              Skip this step if your agent doesn't need domain-specific knowledge.
+            <p className="text-xs font-medium text-gray-400 mt-1">
+              Leave disabled if your agent doesn't need external knowledge context.
             </p>
           )}
         </div>
 
         {/* Agent Summary */}
-        <div className="bg-white border border-[#e5e7eb] rounded-xl p-4 shadow-sm">
-          <h3 className="font-bold mb-3 uppercase text-xs tracking-wider text-[#374151]">Agent Summary</h3>
-          <div className="space-y-2 text-xs">
+        <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
+          <h3 className="font-bold mb-3 uppercase text-[11px] tracking-wider text-gray-400">Deployment Summary</h3>
+          <div className="space-y-2.5 text-xs font-medium">
             <div className="flex justify-between items-center">
-              <span className="text-[#6b7280]">Name</span>
-              <span className="font-semibold text-[#111827] truncate ml-2 max-w-[150px]">{codeValues?.agentName || '—'}</span>
+              <span className="text-gray-500">Agent Name</span>
+              <span className="text-gray-900 font-bold truncate max-w-[150px]">{codeValues?.agentName || '—'}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-[#6b7280]">Model</span>
-              <span className="font-semibold text-[#7c3aed]">{codeValues?.modelName || '—'}</span>
+              <span className="text-gray-500">Model Engine</span>
+              <span className="text-violet-600 font-bold bg-violet-50 px-2 py-0.5 rounded">{codeValues?.modelName || '—'}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-[#6b7280]">Temperature</span>
-              <span className="font-semibold text-[#111827]">{codeValues?.temperature || '—'}</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-[#6b7280]">RAG</span>
-              <span className="font-semibold" style={{ color: enableRag ? '#059669' : '#9ca3af' }}>
+              <span className="text-gray-500">RAG Strategy</span>
+              <span className={`font-bold ${enableRag ? 'text-emerald-600' : 'text-gray-400'}`}>
                 {!enableRag ? 'Disabled' : (hasUrl && hasText && hasFile) ? 'URL + Text + File' : (hasUrl && hasText) ? 'URL + Text' : hasUrl ? 'URL only' : hasText ? 'Text only' : hasFile ? 'File only' : 'Enabled'}
               </span>
             </div>
@@ -434,12 +428,9 @@ if __name__ == "__main__":
             vectorStoreProvider: vectorStore,
             embeddingModel: embeddingModel
           })}
-          className="font-semibold py-3 px-6 rounded-lg w-full text-white shadow-sm transition-colors"
-          style={{ backgroundColor: '#7c3aed' }}
-          onMouseOver={e => e.currentTarget.style.backgroundColor = '#6d28d9'}
-          onMouseOut={e => e.currentTarget.style.backgroundColor = '#7c3aed'}
+          className="font-bold py-3.5 px-6 rounded-xl w-full text-white shadow-md bg-violet-600 hover:bg-violet-700 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-2"
         >
-          Deploy Agent →
+          Ship Agent to Cloud →
         </button>
       </div>
     </div>

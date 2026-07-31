@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { PlusCircle, FileText, ChevronRight, Activity, MessageCircle, Globe, History, MessageSquare, Code, TrendingUp, Microscope, GraduationCap, Users, Trash2 } from "lucide-react";
+import { PlusCircle, FileText, ChevronRight, Activity, MessageCircle, Globe, History, MessageSquare, Code, TrendingUp, Microscope, GraduationCap, Users, Trash2, Box } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { collection, query, where, getDocs, deleteDoc, doc } from "firebase/firestore";
 import AgentVersionHistory from "./AgentVersionHistory";
@@ -13,9 +13,7 @@ const TEMPLATE_CATEGORIES = [
     id: "customer-service",
     label: "Customer Service",
     icon: MessageSquare,
-    color: "#059669",
-    bgColor: "#f0fdf4",
-    borderColor: "#bbf7d0",
+    badgeColors: "bg-emerald-50 text-emerald-600 border-emerald-200",
     templates: [
       {
         id: "support",
@@ -35,9 +33,7 @@ const TEMPLATE_CATEGORIES = [
     id: "development",
     label: "Development",
     icon: Code,
-    color: "#7c3aed",
-    bgColor: "#f3f0ff",
-    borderColor: "#ddd6fe",
+    badgeColors: "bg-violet-50 text-violet-600 border-violet-200",
     templates: [
       {
         id: "engineer",
@@ -57,9 +53,7 @@ const TEMPLATE_CATEGORIES = [
     id: "sales",
     label: "Sales & Marketing",
     icon: TrendingUp,
-    color: "#d97706",
-    bgColor: "#fffbeb",
-    borderColor: "#fde68a",
+    badgeColors: "bg-amber-50 text-amber-600 border-amber-200",
     templates: [
       {
         id: "sales",
@@ -79,9 +73,7 @@ const TEMPLATE_CATEGORIES = [
     id: "research",
     label: "Research",
     icon: Microscope,
-    color: "#0891b2",
-    bgColor: "#ecfeff",
-    borderColor: "#a5f3fc",
+    badgeColors: "bg-cyan-50 text-cyan-600 border-cyan-200",
     templates: [
       {
         id: "researcher",
@@ -101,9 +93,7 @@ const TEMPLATE_CATEGORIES = [
     id: "education",
     label: "Education",
     icon: GraduationCap,
-    color: "#dc2626",
-    bgColor: "#fef2f2",
-    borderColor: "#fecaca",
+    badgeColors: "bg-red-50 text-red-600 border-red-200",
     templates: [
       {
         id: "tutor",
@@ -126,7 +116,6 @@ const ALL_TEMPLATES = TEMPLATE_CATEGORIES.flatMap((cat) =>
   cat.templates.map((t) => ({ ...t, category: cat }))
 );
 
-// ─── Component ────────────────────────────────────────────────────────────
 export default function TemplateSelector({ user, onSelectScratch, onSelectTemplate, onSelectExistingAgent, onSelectWorkspace, onBrowseTemplates, onLogout }) {
   const [agents, setAgents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -149,8 +138,6 @@ export default function TemplateSelector({ user, onSelectScratch, onSelectTempla
           if (!a.createdAt || !b.createdAt) return 0;
           return b.createdAt.toMillis() - a.createdAt.toMillis();
         });
-
-      
         setAgents(agentsList);
       } catch (error) {
         console.error("Error fetching agents:", error);
@@ -208,37 +195,44 @@ export default function TemplateSelector({ user, onSelectScratch, onSelectTempla
   };
 
   return (
-    <div style={{ backgroundColor: "#f8fafc", minHeight: "100vh", fontFamily: "Inter, sans-serif", display: "flex", color: "#374151" }}>
-
+    <div className="min-h-screen bg-slate-50 font-sans flex text-slate-700">
+      
       {/* ── Embed Modal ───────────────────────────────────────────────── */}
       {embedAgent && (
-        <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center", padding: "24px" }}>
-          <div style={{ backgroundColor: "#ffffff", borderRadius: "16px", width: "100%", maxWidth: "640px", overflow: "hidden", boxShadow: "0 20px 60px rgba(0,0,0,0.2)" }}>
-            <div style={{ padding: "20px 24px", borderBottom: "1px solid #e5e7eb", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-6 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
+            <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
               <div>
-                <h2 style={{ margin: 0, fontSize: "16px", fontWeight: "700", color: "#111827" }}>Deploy to Website</h2>
-                <p style={{ margin: "4px 0 0", fontSize: "12px", color: "#6b7280" }}>Embed <strong>{embedAgent.agentName || "your agent"}</strong> on any webpage</p>
+                <h2 className="text-lg font-bold text-gray-900">Deploy to Website</h2>
+                <p className="text-sm text-gray-500 mt-1">Embed <strong className="text-violet-600">{embedAgent.agentName || "your agent"}</strong> on any webpage</p>
               </div>
-              <button onClick={() => setEmbedAgent(null)} style={{ background: "none", border: "none", fontSize: "20px", cursor: "pointer", color: "#6b7280" }}>×</button>
+              <button onClick={() => setEmbedAgent(null)} className="text-gray-400 hover:text-gray-600 transition-colors">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+              </button>
             </div>
-            <div style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "20px" }}>
+            <div className="p-6 flex flex-col gap-5 bg-slate-50/50">
               {[
                 { label: "HTML Script Tag", key: "script", code: `<script\n  src="https://cdn.lyzr.ai/widget.js"\n  data-agent-id="${embedAgent.agentId}"\n  data-theme="light"\n  async>\n</script>` },
                 { label: "React Component", key: "react", code: `import LyzrWidget from '@lyzr-ai/widget-react';\n\n<LyzrWidget\n  agentId="${embedAgent.agentId}"\n  theme="light"\n/>` },
                 { label: "iFrame Embed", key: "iframe", code: `<iframe\n  src="https://app.lyzr.ai/embed/${embedAgent.agentId}"\n  width="400" height="600"\n  frameborder="0">\n</iframe>` },
               ].map(({ label, key, code }) => (
-                <div key={key}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-                    <span style={{ fontSize: "12px", fontWeight: "700", color: "#374151", textTransform: "uppercase" }}>{label}</span>
-                    <button onClick={() => copyEmbed(code, key)} style={{ fontSize: "11px", fontWeight: "600", color: embedCopied === key ? "#059669" : "#7c3aed", background: "none", border: "none", cursor: "pointer" }}>
-                      {embedCopied === key ? "Copied!" : "Copy"}
+                <div key={key} className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                  <div className="flex justify-between items-center px-4 py-3 border-b border-gray-100 bg-gray-50">
+                    <span className="text-xs font-bold text-gray-600 uppercase tracking-wider">{label}</span>
+                    <button 
+                      onClick={() => copyEmbed(code, key)} 
+                      className={`text-xs font-semibold transition-colors ${embedCopied === key ? "text-emerald-600" : "text-violet-600 hover:text-violet-700"}`}
+                    >
+                      {embedCopied === key ? "Copied!" : "Copy code"}
                     </button>
                   </div>
-                  <pre style={{ margin: 0, padding: "12px 16px", backgroundColor: "#111827", borderRadius: "8px", fontSize: "12px", color: "#f8fafc", overflowX: "auto", whiteSpace: "pre-wrap", wordBreak: "break-all" }}>{code}</pre>
+                  <pre className="m-0 p-4 bg-gray-900 text-gray-100 text-[13px] overflow-x-auto whitespace-pre-wrap break-all font-mono">
+                    {code}
+                  </pre>
                 </div>
               ))}
-              <div style={{ padding: "12px 16px", backgroundColor: "#f0fdf4", borderRadius: "8px", border: "1px solid #bbf7d0" }}>
-                <p style={{ margin: 0, fontSize: "12px", color: "#065f46" }}>Agent ID: <code style={{ fontFamily: "monospace", fontWeight: "700" }}>{embedAgent.agentId}</code></p>
+              <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-xl">
+                <p className="text-sm text-emerald-800 m-0 font-medium">Agent ID: <code className="font-mono font-bold bg-white px-2 py-0.5 rounded text-emerald-900 border border-emerald-200">{embedAgent.agentId}</code></p>
               </div>
             </div>
           </div>
@@ -246,291 +240,291 @@ export default function TemplateSelector({ user, onSelectScratch, onSelectTempla
       )}
 
       {/* ── Sidebar ──────────────────────────────────────────────────── */}
-      <aside style={{ width: "256px", backgroundColor: "#ffffff", borderRight: "1px solid #e5e7eb", display: "flex", flexDirection: "column", padding: "14px" }}>
-        <div style={{ marginBottom: "20px", display: "flex", alignItems: "center", gap: "6px" }}>
-          <div style={{ width: "32px", height: "32px", backgroundColor: "#f8fafc", border: "1px solid #e5e7eb", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Activity size={16} color="#7c3aed" />
+      <aside className="w-64 bg-white border-r border-gray-200 flex flex-col p-5 shadow-sm z-10">
+        <div className="flex items-center gap-3 mb-8">
+          <div className="w-10 h-10 bg-violet-50 border border-violet-100 rounded-xl flex items-center justify-center shadow-inner">
+            <Box size={20} className="text-violet-600" />
           </div>
-          <h2 style={{ fontSize: "14px", fontWeight: "700", color: "#111827", margin: 0 }}>Lyzr Agent</h2>
+          <h2 className="text-lg font-bold text-gray-900 tracking-tight">Lyzr Agent</h2>
         </div>
 
-        <nav style={{ flex: 1 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "8px 12px", backgroundColor: "#f8fafc", color: "#7c3aed", border: "1px solid #ddd6fe", borderRadius: "8px", fontSize: "12px", fontWeight: "700" }}>
-            <Activity size={14} /> Overview
+        <nav className="flex-1 space-y-1">
+          <div className="flex items-center gap-3 px-3 py-2.5 bg-violet-50 text-violet-700 font-semibold rounded-xl border border-violet-100 shadow-sm transition-all">
+            <Activity size={18} /> Overview
+          </div>
+          <div className="flex items-center gap-3 px-3 py-2.5 text-gray-600 font-medium rounded-xl hover:bg-gray-50 transition-colors cursor-pointer">
+            <Globe size={18} /> Settings
           </div>
         </nav>
 
-        <div style={{ padding: "12px", borderTop: "1px solid #e5e7eb", display: "flex", flexDirection: "column", gap: "8px" }}>
-          <div style={{ fontSize: "10px", fontWeight: "700", color: "#6b7280", wordBreak: "break-all" }}>{user?.email}</div>
-          <button onClick={onLogout} style={{ display: "flex", alignItems: "center", gap: "8px", padding: "6px 10px", backgroundColor: "#fef2f2", color: "#ef4444", border: "1px solid #fecaca", borderRadius: "6px", fontSize: "11px", fontWeight: "700", cursor: "pointer" }}>
+        <div className="pt-4 border-t border-gray-100 flex flex-col gap-3">
+          <div className="text-xs font-semibold text-gray-500 break-all px-2 truncate" title={user?.email}>{user?.email}</div>
+          <button onClick={onLogout} className="flex items-center justify-center gap-2 px-3 py-2.5 bg-gray-50 hover:bg-red-50 text-gray-700 hover:text-red-600 font-semibold rounded-xl border border-transparent hover:border-red-100 transition-colors w-full">
             Log Out
           </button>
         </div>
       </aside>
 
       {/* ── Main Content ─────────────────────────────────────────────── */}
-      <main style={{ flex: 1, padding: "20px 40px", overflowY: "auto" }}>
+      <main className="flex-1 p-8 md:p-10 lg:p-12 overflow-y-auto">
+        <div className="max-w-6xl mx-auto">
+          {/* Header */}
+          <header className="mb-10">
+            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-2">Create New Agent</h1>
+            <p className="text-base text-gray-500">Choose how to build your Lyzr agent — start blank or pick a pre-built template.</p>
+          </header>
 
-        {/* Header */}
-        <header style={{ marginBottom: "24px" }}>
-          <h1 style={{ fontSize: "28px", fontWeight: "700", color: "#111827", margin: "0 0 6px 0" }}>Create New Agent</h1>
-          <p style={{ fontSize: "14px", color: "#6b7280", margin: 0 }}>Choose how to build your Lyzr agent — start blank or pick a pre-built template.</p>
-        </header>
+          {/* ── Row: Scratch card + Template browser ─────────────────── */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12 items-start">
 
-        {/* ── Row: Scratch card + Template browser ─────────────────── */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "16px", marginBottom: "28px", alignItems: "start" }}>
-
-          {/* FROM SCRATCH ─ box card */}
-          <div
-            onClick={onSelectScratch}
-            style={{ backgroundColor: "#ffffff", border: "1px solid #e5e7eb", borderRadius: "16px", padding: "28px 24px", cursor: "pointer", transition: "all 150ms", boxShadow: "0 1px 3px rgba(0,0,0,0.06)", display: "flex", flexDirection: "column", gap: "16px" }}
-            onMouseOver={(e) => { e.currentTarget.style.borderColor = "#ddd6fe"; e.currentTarget.style.boxShadow = "0 6px 20px rgba(124,58,237,0.15)"; }}
-            onMouseOut={(e) => { e.currentTarget.style.borderColor = "#e5e7eb"; e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,0,0,0.06)"; }}
-          >
-            <div style={{ width: "52px", height: "52px", backgroundColor: "#f3f0ff", borderRadius: "14px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <PlusCircle size={26} color="#7c3aed" />
-            </div>
-            <div>
-              <h3 style={{ fontSize: "17px", fontWeight: "700", color: "#111827", margin: "0 0 6px 0" }}>From Scratch</h3>
-              <p style={{ fontSize: "12px", color: "#6b7280", margin: 0, lineHeight: "18px" }}>
-                Blank configuration. Full control over logic, tools, and persona. Best for experienced developers.
-              </p>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", fontWeight: "700", color: "#7c3aed", marginTop: "auto" }}>
-              Initialize <ChevronRight size={14} />
-            </div>
-          </div>
-
-          {/* FROM TEMPLATE ─ category browser box */}
-          <div style={{ backgroundColor: "#ffffff", border: "1px solid #e5e7eb", borderRadius: "16px", padding: "20px", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
-
-            {/* Header row */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <div style={{ width: "36px", height: "36px", backgroundColor: "#f3f0ff", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <FileText size={18} color="#7c3aed" />
-                </div>
-                <div>
-                  <h3 style={{ fontSize: "16px", fontWeight: "700", color: "#111827", margin: 0 }}>Browse Templates</h3>
-                  <p style={{ fontSize: "11px", color: "#9ca3af", margin: 0 }}>Pick a pre-built agent and customise via tutorial</p>
-                </div>
+            {/* FROM SCRATCH ─ box card */}
+            <div
+              onClick={onSelectScratch}
+              className="bg-white border border-gray-200 rounded-2xl p-7 cursor-pointer transition-all duration-200 shadow-sm hover:border-violet-300 hover:shadow-xl hover:shadow-violet-500/10 flex flex-col h-full group"
+            >
+              <div className="w-12 h-12 bg-violet-50 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+                <PlusCircle size={24} className="text-violet-600" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">From Scratch</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">
+                  Blank configuration. Full control over logic, tools, and persona. Best for experienced developers.
+                </p>
+              </div>
+              <div className="inline-flex w-max items-center gap-1.5 px-4 py-2 mt-auto bg-violet-600 text-white rounded-lg text-sm font-bold group-hover:bg-violet-700 transition-colors shadow-sm">
+                Initialize <ChevronRight size={16} />
               </div>
             </div>
 
-            <div>
-              <p style={{ fontSize: "12px", color: "#6b7280", marginBottom: "14px", lineHeight: "18px" }}>
-                {ALL_TEMPLATES.length} pre-built agents across {TEMPLATE_CATEGORIES.length} categories. Pick one and customise it through an interactive tutorial.
-              </p>
-              <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginBottom: "18px" }}>
-                {TEMPLATE_CATEGORIES.map((cat) => (
-                  <span
-                    key={cat.id}
-                    style={{ display: "inline-flex", alignItems: "center", gap: "4px", padding: "3px 10px", borderRadius: "20px", fontSize: "11px", fontWeight: "600", backgroundColor: cat.bgColor, color: cat.color, border: `1px solid ${cat.borderColor}` }}
-                  >
-                    <cat.icon size={12} /> {cat.label} · {cat.templates.length}
-                  </span>
-                ))}
+            {/* FROM TEMPLATE ─ category browser box */}
+            <div className="lg:col-span-2 bg-white border border-gray-200 rounded-2xl p-7 shadow-sm h-full flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center border border-gray-100">
+                    <FileText size={20} className="text-gray-700" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-900">Browse Templates</h3>
+                    <p className="text-xs text-gray-500 mt-0.5">Pick a pre-built agent and customise via tutorial</p>
+                  </div>
+                </div>
+
+                <p className="text-sm text-gray-500 mb-5 leading-relaxed">
+                  <strong className="text-gray-900">{ALL_TEMPLATES.length}</strong> pre-built agents across <strong className="text-gray-900">{TEMPLATE_CATEGORIES.length}</strong> categories. Pick one and customise it through an interactive tutorial.
+                </p>
+                <div className="flex gap-2 flex-wrap mb-6">
+                  {TEMPLATE_CATEGORIES.map((cat) => (
+                    <span
+                      key={cat.id}
+                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border ${cat.badgeColors}`}
+                    >
+                      <cat.icon size={14} /> {cat.label} · {cat.templates.length}
+                    </span>
+                  ))}
+                </div>
               </div>
               <button
                 onClick={() => onBrowseTemplates()}
-                style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "8px 18px", fontSize: "12px", fontWeight: "700", backgroundColor: "#7c3aed", color: "#ffffff", border: "none", borderRadius: "8px", cursor: "pointer", transition: "background 150ms" }}
-                onMouseOver={(e) => { e.currentTarget.style.backgroundColor = "#6d28d9"; }}
-                onMouseOut={(e) => { e.currentTarget.style.backgroundColor = "#7c3aed"; }}
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-bold bg-violet-600 text-white rounded-xl shadow-sm hover:bg-violet-700 hover:shadow transition-all w-max"
               >
-                Browse Templates <ChevronRight size={13} />
+                Browse Templates <ChevronRight size={16} />
               </button>
             </div>
           </div>
-        </div>
 
-        {/* ── Workspaces ───────────────────────────────────── */}
-        <div style={{ marginTop: "24px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px", paddingBottom: "6px", borderBottom: "1px solid #f3f4f6" }}>
-            <h3 style={{ fontSize: "18px", fontWeight: "700", color: "#111827", margin: 0 }}>My Workspaces</h3>
-            <button 
-              onClick={() => setShowWorkspaceBuilder(true)}
-              style={{ padding: "6px 12px", backgroundColor: "#059669", color: "#ffffff", fontSize: "12px", fontWeight: "700", border: "none", borderRadius: "6px", cursor: "pointer", display: "flex", alignItems: "center", gap: "6px" }}
-            >
-              <Users size={14} /> Create Workspace
-            </button>
-          </div>
-          
-          <div style={{ backgroundColor: "#ffffff", border: "1px solid #e5e7eb", borderRadius: "12px", overflow: "hidden" }}>
-            <table style={{ width: "100%", textAlign: "left", borderCollapse: "collapse", fontSize: "12px" }}>
-              <thead style={{ backgroundColor: "#f8fafc", borderBottom: "1px solid #e5e7eb", fontSize: "10px", color: "#374151", textTransform: "uppercase" }}>
-                <tr>
-                  <th style={{ padding: "10px 14px", fontWeight: "700" }}>Workspace Name</th>
-                  <th style={{ padding: "10px 14px", fontWeight: "700" }}>Agents Linked</th>
-                  <th style={{ padding: "10px 14px", fontWeight: "700" }}>Created At</th>
-                  <th style={{ padding: "10px 14px", fontWeight: "700" }}>Workspace ID</th>
-                  <th style={{ padding: "10px 14px", fontWeight: "700", textAlign: "right" }}>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {isLoading ? (
-                  <tr>
-                    <td colSpan="5" style={{ padding: "20px", textAlign: "center", color: "#6b7280" }}>Loading workspaces…</td>
-                  </tr>
-                ) : workspaces.length === 0 ? (
-                  <tr>
-                    <td colSpan="5" style={{ padding: "20px", textAlign: "center", color: "#6b7280" }}>No workspaces created. Build one to let your agents collaborate!</td>
-                  </tr>
-                ) : (
-                  workspaces.map((ws) => (
-                    <tr key={ws.id} style={{ borderBottom: "1px solid #f3f4f6" }}>
-                      <td style={{ padding: "10px 14px", color: "#111827", fontWeight: "700" }}>{ws.name}</td>
-                      <td style={{ padding: "10px 14px" }}>
-                        <div style={{ display: "flex", gap: "4px" }}>
-                          {ws.agents.map((agId, i) => (
-                            <span key={i} style={{ fontSize: "10px", backgroundColor: "#f3f4f6", padding: "2px 6px", borderRadius: "4px" }}>{agId.slice(0,6)}...</span>
-                          ))}
-                        </div>
-                      </td>
-                      <td style={{ padding: "10px 14px", color: "#6b7280" }}>
-                        {ws.createdAt?.toDate ? ws.createdAt.toDate().toLocaleDateString() : "Just now"}
-                      </td>
-                      <td style={{ padding: "10px 14px", fontFamily: "monospace", color: "#6b7280" }}>{ws.id}</td>
-                      <td style={{ padding: "10px 14px", textAlign: "right" }}>
-                        <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end" }}>
-                          <button
-                            onClick={() => onSelectWorkspace && onSelectWorkspace(ws)}
-                            title="Open Workspace Sandbox"
-                            style={{ padding: "6px", background: "transparent", border: "1px solid #e5e7eb", borderRadius: "6px", cursor: "pointer", color: "#7c3aed", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
-                            onMouseOver={(e) => { e.currentTarget.style.backgroundColor = "#f8fafc"; e.currentTarget.style.borderColor = "#ddd6fe"; }}
-                            onMouseOut={(e) => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.borderColor = "#e5e7eb"; }}
-                          >
-                            <MessageCircle size={14} />
-                          </button>
-                          <button
-                            onClick={() => handleDeleteWorkspace(ws.id)}
-                            title="Delete Workspace"
-                            style={{ padding: "6px", background: "transparent", border: "1px solid #e5e7eb", borderRadius: "6px", cursor: "pointer", color: "#ef4444", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
-                            onMouseOver={(e) => { e.currentTarget.style.backgroundColor = "#fef2f2"; e.currentTarget.style.borderColor = "#fecaca"; }}
-                            onMouseOut={(e) => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.borderColor = "#e5e7eb"; }}
-                          >
-                            <Trash2 size={14} />
-                          </button>
-                        </div>
-                      </td>
+          {/* ── Workspaces ───────────────────────────────────── */}
+          <div className="mb-12">
+            <div className="flex justify-between items-end mb-6 pb-4 border-b border-gray-200">
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 tracking-tight">My Workspaces</h3>
+                <p className="text-sm text-gray-500 mt-1">Collaborative environments for your agents</p>
+              </div>
+              <button 
+                onClick={() => setShowWorkspaceBuilder(true)}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-xl shadow-sm transition-colors"
+              >
+                <Users size={16} /> Create Workspace
+              </button>
+            </div>
+            
+            <div className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse whitespace-nowrap">
+                  <thead className="bg-slate-50 border-b border-gray-200 text-xs text-gray-500 uppercase tracking-wider font-semibold">
+                    <tr>
+                      <th className="px-6 py-4">Workspace Name</th>
+                      <th className="px-6 py-4">Agents Linked</th>
+                      <th className="px-6 py-4">Created At</th>
+                      <th className="px-6 py-4">Workspace ID</th>
+                      <th className="px-6 py-4 text-right">Actions</th>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100 text-sm">
+                    {isLoading ? (
+                      <tr>
+                        <td colSpan="5" className="px-6 py-12 text-center text-gray-500">Loading workspaces…</td>
+                      </tr>
+                    ) : workspaces.length === 0 ? (
+                      <tr>
+                        <td colSpan="5" className="px-6 py-12 text-center text-gray-500">No workspaces created. Build one to let your agents collaborate!</td>
+                      </tr>
+                    ) : (
+                      workspaces.map((ws) => (
+                        <tr key={ws.id} className="hover:bg-slate-50/50 transition-colors group">
+                          <td className="px-6 py-4 text-gray-900 font-bold">{ws.name}</td>
+                          <td className="px-6 py-4">
+                            <div className="flex gap-1.5">
+                              {ws.agents.map((agId, i) => (
+                                <span key={i} className="text-[10px] font-mono bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md border border-slate-200">{agId.slice(0,6)}...</span>
+                              ))}
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 text-gray-500">
+                            {ws.createdAt?.toDate ? ws.createdAt.toDate().toLocaleDateString() : "Just now"}
+                          </td>
+                          <td className="px-6 py-4 font-mono text-gray-400 text-xs">{ws.id}</td>
+                          <td className="px-6 py-4 text-right">
+                            <div className="flex gap-2 justify-end">
+                              <button
+                                onClick={() => onSelectWorkspace && onSelectWorkspace(ws)}
+                                title="Open Workspace Sandbox"
+                                className="p-2 bg-white border border-gray-200 text-violet-600 rounded-lg hover:bg-violet-50 hover:border-violet-200 transition-colors shadow-sm"
+                              >
+                                <MessageCircle size={16} />
+                              </button>
+                              <button
+                                onClick={() => handleDeleteWorkspace(ws.id)}
+                                title="Delete Workspace"
+                                className="p-2 bg-white border border-gray-200 text-red-500 rounded-lg hover:bg-red-50 hover:border-red-200 transition-colors shadow-sm"
+                              >
+                                <Trash2 size={16} />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
-        </div>
 
-        {/* ── Recent Deployments ───────────────────────────────────── */}
-        <div>
-          <h3 style={{ fontSize: "18px", fontWeight: "700", color: "#111827", marginBottom: "10px", paddingBottom: "6px", borderBottom: "1px solid #f3f4f6" }}>Recent Deployments</h3>
+          {/* ── Recent Deployments ───────────────────────────────────── */}
+          <div>
+            <div className="flex justify-between items-end mb-6 pb-4 border-b border-gray-200">
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 tracking-tight">Recent Deployments</h3>
+                <p className="text-sm text-gray-500 mt-1">Manage and test your active agents</p>
+              </div>
+            </div>
 
-          <div style={{ backgroundColor: "#ffffff", border: "1px solid #e5e7eb", borderRadius: "12px", overflow: "hidden" }}>
-            <table style={{ width: "100%", textAlign: "left", borderCollapse: "collapse", fontSize: "12px" }}>
-              <thead style={{ backgroundColor: "#f8fafc", borderBottom: "1px solid #e5e7eb", fontSize: "10px", color: "#374151", textTransform: "uppercase" }}>
-                <tr>
-                  <th style={{ padding: "10px 14px", fontWeight: "700" }}>Agent Name</th>
-                  <th style={{ padding: "10px 14px", fontWeight: "700" }}>Category</th>
-                  <th style={{ padding: "10px 14px", fontWeight: "700" }}>Agent ID</th>
-                  <th style={{ padding: "10px 14px", fontWeight: "700" }}>Status</th>
-                  <th style={{ padding: "10px 14px", fontWeight: "700" }}>Model</th>
-                  <th style={{ padding: "10px 14px", fontWeight: "700" }}>RAG URL</th>
-                  <th style={{ padding: "10px 14px", fontWeight: "700", textAlign: "right" }}>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {isLoading ? (
-                  <tr>
-                    <td colSpan="7" style={{ padding: "20px", textAlign: "center", color: "#6b7280" }}>Loading deployments…</td>
-                  </tr>
-                ) : agents.length === 0 ? (
-                  <tr>
-                    <td colSpan="7" style={{ padding: "20px", textAlign: "center", color: "#6b7280" }}>No agents deployed yet. Create one above!</td>
-                  </tr>
-                ) : (
-                  agents.map((agent) => (
-                    <tr key={agent.id} style={{ borderBottom: "1px solid #f3f4f6" }}>
-                      <td style={{ padding: "10px 14px", color: "#111827", fontWeight: "700" }}>
-                        {agent.agentName || agent.config?.name || "Unnamed Agent"}
-                        {agent.source === "tutorial" && (
-                          <span style={{ fontSize: "9px", fontWeight: "700", color: "#7c3aed", backgroundColor: "#f3f0ff", padding: "1px 5px", borderRadius: "4px", marginLeft: "6px" }}>SDK Tutorial</span>
-                        )}
-                      </td>
-                      <td style={{ padding: "10px 14px" }}>
-                        {agent.creationMode === "template" ? (
-                          <span style={{ fontSize: "10px", fontWeight: "600", color: "#ea580c", backgroundColor: "#fff7ed", padding: "2px 6px", borderRadius: "12px", border: "1px solid #ffedd5" }}>
-                            Template{agent.templateCategory ? ` · ${agent.templateCategory}` : ""}
-                          </span>
-                        ) : agent.creationMode === "scratch" ? (
-                          <span style={{ fontSize: "10px", fontWeight: "600", color: "#4f46e5", backgroundColor: "#eef2ff", padding: "2px 6px", borderRadius: "12px", border: "1px solid #e0e7ff" }}>
-                            Scratch
-                          </span>
-                        ) : (
-                          <span style={{ fontSize: "10px", fontWeight: "600", color: "#6b7280", backgroundColor: "#f3f4f6", padding: "2px 6px", borderRadius: "12px", border: "1px solid #e5e7eb" }}>
-                            Legacy
-                          </span>
-                        )}
-                      </td>
-                      <td style={{ padding: "10px 14px", color: "#6b7280", fontFamily: "monospace", fontSize: "11px" }}>{agent.agentId}</td>
-                      <td style={{ padding: "10px 14px" }}>
-                        <span style={{
-                          backgroundColor: agent.status === "Failed" ? "#fef2f2" : "#f0fdf4",
-                          color: agent.status === "Failed" ? "#ef4444" : "#059669",
-                          padding: "2px 6px", borderRadius: "8px", fontSize: "10px", fontWeight: "700",
-                          border: `1px solid ${agent.status === "Failed" ? "#fecaca" : "#bbf7d0"}`,
-                        }}>
-                          {agent.status || "Operational"}
-                        </span>
-                      </td>
-                      <td style={{ padding: "10px 14px", color: "#374151", fontSize: "11px" }}>{agent.model || agent.config?.model || "—"}</td>
-                      <td style={{ padding: "10px 14px", color: "#374151", fontSize: "11px", maxWidth: "160px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                        {agent.ragUrl ? (
-                          <a href={agent.ragUrl} target="_blank" rel="noreferrer" style={{ color: "#7c3aed", display: "flex", alignItems: "center", gap: "4px", textDecoration: "none" }}>
-                            <Globe size={10} /> {agent.ragUrl.replace(/^https?:\/\//, "").substring(0, 20)}…
-                          </a>
-                        ) : "—"}
-                      </td>
-                      <td style={{ padding: "10px 14px", textAlign: "right", display: "flex", gap: "6px", justifyContent: "flex-end" }}>
-                        <button
-                          onClick={() => setHistoryAgent(agent)}
-                          title="Version History"
-                          style={{ padding: "6px", background: "transparent", border: "1px solid #e5e7eb", borderRadius: "6px", cursor: "pointer", color: "#374151", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
-                          onMouseOver={(e) => { e.currentTarget.style.backgroundColor = "#f9fafb"; e.currentTarget.style.borderColor = "#d1d5db"; }}
-                          onMouseOut={(e) => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.borderColor = "#e5e7eb"; }}
-                        >
-                          <History size={14} />
-                        </button>
-                        <button
-                          onClick={() => handleDeleteAgent(agent.id)}
-                          title="Delete Deployment"
-                          style={{ padding: "6px", background: "transparent", border: "1px solid #e5e7eb", borderRadius: "6px", cursor: "pointer", color: "#ef4444", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
-                          onMouseOver={(e) => { e.currentTarget.style.backgroundColor = "#fef2f2"; e.currentTarget.style.borderColor = "#fecaca"; }}
-                          onMouseOut={(e) => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.borderColor = "#e5e7eb"; }}
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                        <button
-                          onClick={() => onSelectExistingAgent(agent)}
-                          title="Open Sandbox"
-                          style={{ padding: "6px", background: "transparent", border: "1px solid #e5e7eb", borderRadius: "6px", cursor: "pointer", color: "#7c3aed", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
-                          onMouseOver={(e) => { e.currentTarget.style.backgroundColor = "#f8fafc"; e.currentTarget.style.borderColor = "#ddd6fe"; }}
-                          onMouseOut={(e) => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.borderColor = "#e5e7eb"; }}
-                        >
-                          <MessageCircle size={14} />
-                        </button>
-                        <button
-                          onClick={() => setEmbedAgent(agent)}
-                          title="Deploy to Website"
-                          style={{ padding: "6px 10px", background: "#7c3aed", border: "none", borderRadius: "6px", cursor: "pointer", color: "#ffffff", display: "inline-flex", alignItems: "center", gap: "4px", fontSize: "11px", fontWeight: "700" }}
-                        >
-                          Deploy to Website
-                        </button>
-                      </td>
+            <div className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse whitespace-nowrap">
+                  <thead className="bg-slate-50 border-b border-gray-200 text-xs text-gray-500 uppercase tracking-wider font-semibold">
+                    <tr>
+                      <th className="px-6 py-4">Agent Name</th>
+                      <th className="px-6 py-4">Category</th>
+                      <th className="px-6 py-4">Agent ID</th>
+                      <th className="px-6 py-4">Status</th>
+                      <th className="px-6 py-4">Model</th>
+                      <th className="px-6 py-4">RAG URL</th>
+                      <th className="px-6 py-4 text-right">Actions</th>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100 text-sm">
+                    {isLoading ? (
+                      <tr>
+                        <td colSpan="7" className="px-6 py-12 text-center text-gray-500">Loading deployments…</td>
+                      </tr>
+                    ) : agents.length === 0 ? (
+                      <tr>
+                        <td colSpan="7" className="px-6 py-12 text-center text-gray-500">No agents deployed yet. Create one above!</td>
+                      </tr>
+                    ) : (
+                      agents.map((agent) => (
+                        <tr key={agent.id} className="hover:bg-slate-50/50 transition-colors group">
+                          <td className="px-6 py-4 text-gray-900 font-bold flex items-center gap-2">
+                            {agent.agentName || agent.config?.name || "Unnamed Agent"}
+                            {agent.source === "tutorial" && (
+                              <span className="text-[9px] font-bold text-violet-700 bg-violet-100 px-1.5 py-0.5 rounded uppercase tracking-wider">SDK</span>
+                            )}
+                          </td>
+                          <td className="px-6 py-4">
+                            {agent.creationMode === "template" ? (
+                              <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+                                Template{agent.templateCategory ? ` · ${agent.templateCategory}` : ""}
+                              </span>
+                            ) : agent.creationMode === "scratch" ? (
+                              <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">
+                                Scratch
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-gray-100 text-gray-600 border border-gray-200">
+                                Legacy
+                              </span>
+                            )}
+                          </td>
+                          <td className="px-6 py-4 font-mono text-gray-400 text-xs">{agent.agentId}</td>
+                          <td className="px-6 py-4">
+                            <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold border ${
+                              agent.status === "Failed" 
+                                ? "bg-red-50 text-red-700 border-red-200" 
+                                : "bg-emerald-50 text-emerald-700 border-emerald-200"
+                            }`}>
+                              {agent.status || "Operational"}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-gray-600 text-xs">{agent.model || agent.config?.model || "—"}</td>
+                          <td className="px-6 py-4 text-gray-600 text-xs">
+                            {agent.ragUrl ? (
+                              <a href={agent.ragUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-violet-600 hover:text-violet-800 hover:underline">
+                                <Globe size={12} /> <span className="max-w-[120px] truncate">{agent.ragUrl.replace(/^https?:\/\//, "")}</span>
+                              </a>
+                            ) : "—"}
+                          </td>
+                          <td className="px-6 py-4 text-right">
+                            <div className="flex gap-2 justify-end">
+                              <button
+                                onClick={() => setHistoryAgent(agent)}
+                                title="Version History"
+                                className="p-2 bg-white border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 hover:border-gray-300 transition-colors shadow-sm"
+                              >
+                                <History size={16} />
+                              </button>
+                              <button
+                                onClick={() => onSelectExistingAgent(agent)}
+                                title="Open Sandbox"
+                                className="p-2 bg-white border border-gray-200 text-violet-600 rounded-lg hover:bg-violet-50 hover:border-violet-200 transition-colors shadow-sm"
+                              >
+                                <MessageCircle size={16} />
+                              </button>
+                              <button
+                                onClick={() => setEmbedAgent(agent)}
+                                title="Deploy to Website"
+                                className="px-3 py-1.5 bg-violet-600 border border-transparent text-white rounded-lg hover:bg-violet-700 transition-colors shadow-sm text-xs font-bold"
+                              >
+                                Embed
+                              </button>
+                              <button
+                                onClick={() => handleDeleteAgent(agent.id)}
+                                title="Delete Deployment"
+                                className="p-2 bg-white border border-gray-200 text-red-500 rounded-lg hover:bg-red-50 hover:border-red-200 transition-colors shadow-sm"
+                              >
+                                <Trash2 size={16} />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
+
         </div>
       </main>
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { X, Send, Sparkles, Bot } from "lucide-react";
 
 // ─── Quick action chips shown at the bottom ───────────────────────────────
 const QUICK_ACTIONS = [
@@ -10,8 +11,8 @@ const QUICK_ACTIONS = [
   { label: "Which model to use?",   query: "Which AI model should I choose?" },
   { label: "Tutorial steps?",       query: "Walk me through the tutorial steps" },
   { label: "Deploy to website?",    query: "How do I deploy my agent to a website?" },
-  { label: " What is a persona?",    query: "What is a persona and role?" },
-  { label: " Temperature guide",     query: "Explain temperature settings" },
+  { label: "What is a persona?",    query: "What is a persona and role?" },
+  { label: "Temperature guide",     query: "Explain temperature settings" },
 ];
 
 // ─── Knowledge base ───────────────────────────────────────────────────────
@@ -88,7 +89,7 @@ function MsgText({ text }) {
     const parts = str.split(/\*\*(.*?)\*\*/g);
     return parts.map((p, j) =>
       j % 2 === 1 ? (
-        <strong key={j} style={{ fontWeight: 700, color: "#111827" }}>
+        <strong key={j} className="font-bold text-gray-900">
           {p}
         </strong>
       ) : (
@@ -98,20 +99,20 @@ function MsgText({ text }) {
   };
 
   return (
-    <div style={{ fontSize: "11.5px", lineHeight: "1.75", fontFamily: "Inter, sans-serif", color: "#374151" }}>
+    <div className="text-[12.5px] leading-relaxed font-sans text-gray-700 space-y-1.5">
       {text.split("\n").map((line, i) => {
-        if (!line.trim()) return <div key={i} style={{ height: "5px" }} />;
+        if (!line.trim()) return <div key={i} className="h-1.5" />;
 
         // [code]...[/code] or `...` inline code
         if ((line.startsWith("[code]") && line.endsWith("[/code]")) ||
-            (line.startsWith("`") && line.endsWith("`"))) {
+            (line.startsWith("\`") && line.endsWith("\`"))) {
           const content = line.startsWith("[code]")
             ? line.slice(6, -7)
             : line.slice(1, -1);
           return (
             <div
               key={i}
-              style={{ fontFamily: "monospace", fontSize: "10px", backgroundColor: "#f3f0ff", color: "#7c3aed", padding: "3px 8px", borderRadius: "5px", margin: "3px 0", wordBreak: "break-all", border: "1px solid #ddd6fe" }}
+              className="font-mono text-[11px] bg-violet-50 text-violet-700 px-2.5 py-1.5 rounded-md border border-violet-100 break-all my-2 shadow-sm"
             >
               {content}
             </div>
@@ -121,8 +122,8 @@ function MsgText({ text }) {
         // Bullet list
         if (line.startsWith("- ") || line.startsWith("• ")) {
           return (
-            <div key={i} style={{ display: "flex", gap: "6px", alignItems: "flex-start" }}>
-              <span style={{ color: "#7c3aed", flexShrink: 0, marginTop: "1px" }}>•</span>
+            <div key={i} className="flex gap-2 items-start mt-1">
+              <span className="text-violet-600 mt-0.5 shrink-0 font-bold">•</span>
               <span>{renderBold(line.slice(2))}</span>
             </div>
           );
@@ -131,8 +132,8 @@ function MsgText({ text }) {
         // Circled step numbers ①②③④⑤
         if (/^[①②③④⑤]/.test(line)) {
           return (
-            <div key={i} style={{ display: "flex", gap: "6px", alignItems: "flex-start" }}>
-              <span style={{ color: "#7c3aed", fontWeight: 700, flexShrink: 0 }}>{line[0]}</span>
+            <div key={i} className="flex gap-2 items-start mt-1.5">
+              <span className="text-violet-600 font-bold shrink-0 text-sm leading-tight mt-0.5">{line[0]}</span>
               <span>{renderBold(line.slice(2))}</span>
             </div>
           );
@@ -142,8 +143,8 @@ function MsgText({ text }) {
         if (/^\d+\.\s/.test(line)) {
           const num = line.match(/^\d+/)[0];
           return (
-            <div key={i} style={{ display: "flex", gap: "6px", alignItems: "flex-start" }}>
-              <span style={{ color: "#7c3aed", fontWeight: 700, flexShrink: 0, minWidth: "14px" }}>{num}.</span>
+            <div key={i} className="flex gap-2 items-start mt-1">
+              <span className="text-violet-600 font-bold shrink-0 min-w-[14px] leading-relaxed">{num}.</span>
               <span>{renderBold(line.replace(/^\d+\.\s/, ""))}</span>
             </div>
           );
@@ -193,177 +194,74 @@ export function MentorAgent() {
     setMessages((prev) => [...prev, { role: "mentor", content: response, id: Date.now() + 1 }]);
   };
 
-  const PANEL_WIDTH = 390;
-
+  const PANEL_WIDTH = 420;
   return (
     <>
       {/* ── Floating pill button (bottom-right) ─────────────────── */}
       <button
         onClick={() => setIsOpen((v) => !v)}
-        style={{
-          position: "fixed",
-          right: isOpen ? `${PANEL_WIDTH + 20}px` : "20px",
-          bottom: "24px",
-          zIndex: 1001,
-          borderRadius: "50px",
-          background: "linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%)",
-          border: "none",
-          padding: "11px 20px",
-          cursor: "pointer",
-          color: "#ffffff",
-          display: "flex",
-          alignItems: "center",
-          gap: "8px",
-          boxShadow: "0 4px 24px rgba(124,58,237,0.45)",
-          transition: "right 300ms cubic-bezier(0.4,0,0.2,1), transform 150ms, box-shadow 150ms",
-          userSelect: "none",
-          fontSize: "13px",
-          fontWeight: "700",
-          letterSpacing: "0.01em",
-          whiteSpace: "nowrap",
-        }}
-        onMouseOver={(e) => {
-          e.currentTarget.style.transform = "translateY(-2px)";
-          e.currentTarget.style.boxShadow = "0 8px 30px rgba(124,58,237,0.6)";
-        }}
-        onMouseOut={(e) => {
-          e.currentTarget.style.transform = "translateY(0)";
-          e.currentTarget.style.boxShadow = "0 4px 24px rgba(124,58,237,0.45)";
-        }}
-        title={isOpen ? "Close Mentor" : "Open Agent Mentor"}
+        style={{ right: isOpen ? `${PANEL_WIDTH + 24}px` : "24px" }}
+        className="fixed bottom-6 z-[1001] bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-full px-5 py-3.5 flex items-center justify-center shadow-[0_8px_30px_rgba(124,58,237,0.3)] hover:shadow-[0_8px_30px_rgba(124,58,237,0.5)] transition-all duration-300 ease-out hover:-translate-y-1 group"
+        title={isOpen ? "Close Mentor" : "Ask Mentor"}
       >
-        <span style={{ fontSize: "17px", lineHeight: 1 }}>{isOpen ? "" : ""}</span>
-        <span>{isOpen ? "Close" : "Ask Mentor"}</span>
+        <span className="text-[13px] font-bold tracking-wide">{isOpen ? "Close" : "Ask Mentor"}</span>
       </button>
 
       {/* ── Slide-in panel ────────────────────────────────────────── */}
       <div
         style={{
-          position: "fixed",
-          right: isOpen ? "0" : `-${PANEL_WIDTH + 10}px`,
-          top: 0,
-          bottom: 0,
+          right: isOpen ? "0" : `-${PANEL_WIDTH + 20}px`,
           width: `${PANEL_WIDTH}px`,
-          backgroundColor: "#ffffff",
-          boxShadow: "-6px 0 40px rgba(0,0,0,0.14)",
-          transition: "right 300ms cubic-bezier(0.4,0,0.2,1)",
-          zIndex: 1000,
-          display: "flex",
-          flexDirection: "column",
-          borderLeft: "1px solid #e5e7eb",
-          fontFamily: "Inter, sans-serif",
         }}
+        className="fixed top-0 bottom-0 z-[1000] bg-white/95 backdrop-blur-xl border-l border-gray-200/50 shadow-2xl transition-all duration-300 ease-out flex flex-col font-sans"
       >
         {/* Header */}
-        <div
-          style={{
-            padding: "16px 20px",
-            background: "linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%)",
-            display: "flex",
-            alignItems: "center",
-            gap: "12px",
-            flexShrink: 0,
-          }}
-        >
-          <div
-            style={{
-              width: "40px",
-              height: "40px",
-              backgroundColor: "rgba(255,255,255,0.15)",
-              borderRadius: "12px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "22px",
-              flexShrink: 0,
-              border: "1px solid rgba(255,255,255,0.2)",
-            }}
-          >
-            
+        <div className="bg-gradient-to-r from-violet-600 to-indigo-600 p-5 flex items-center gap-4 shrink-0 shadow-md relative overflow-hidden">
+          <div className="absolute inset-0 bg-white/5 backdrop-blur-sm pointer-events-none" />
+          
+          <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center border border-white/20 shadow-inner backdrop-blur-md relative z-10">
+            <Bot size={22} className="text-white" />
           </div>
-          <div style={{ flex: 1 }}>
-            <div style={{ fontSize: "14px", fontWeight: "700", color: "#ffffff" }}>Agent Mentor</div>
-            <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.75)", display: "flex", alignItems: "center", gap: "5px", marginTop: "2px" }}>
-              <span style={{ width: "7px", height: "7px", backgroundColor: "#4ade80", borderRadius: "50%", display: "inline-block", boxShadow: "0 0 6px #4ade80" }} />
+          
+          <div className="flex-1 relative z-10">
+            <div className="text-[15px] font-bold text-white tracking-wide drop-shadow-sm">Agent Mentor</div>
+            <div className="text-xs text-indigo-100 flex items-center gap-1.5 mt-0.5 opacity-90 font-medium">
               Online · Lyzr Platform Guide
             </div>
           </div>
+          
           <button
             onClick={() => setIsOpen(false)}
-            style={{
-              background: "rgba(255,255,255,0.15)",
-              border: "1px solid rgba(255,255,255,0.25)",
-              color: "#ffffff",
-              cursor: "pointer",
-              padding: "5px 9px",
-              borderRadius: "6px",
-              fontSize: "13px",
-              lineHeight: 1,
-              flexShrink: 0,
-            }}
-            onMouseOver={(e) => { e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.25)"; }}
-            onMouseOut={(e) => { e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.15)"; }}
+            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 flex items-center justify-center text-white transition-colors relative z-10"
           >
-            
+            <X size={16} />
           </button>
         </div>
 
         {/* Messages area */}
-        <div
-          style={{
-            flex: 1,
-            overflowY: "auto",
-            padding: "16px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "14px",
-            backgroundColor: "#fafafa",
-          }}
-        >
+        <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-4 scroll-smooth bg-gray-50/50">
           {messages.map((msg) => (
             <div
               key={msg.id}
-              style={{
-                display: "flex",
-                gap: "8px",
-                alignItems: "flex-end",
-                flexDirection: msg.role === "user" ? "row-reverse" : "row",
-              }}
+              className={`flex items-end gap-2.5 max-w-[90%] animate-in fade-in slide-in-from-bottom-2 duration-300 ${msg.role === "user" ? "self-end flex-row-reverse" : "self-start"}`}
             >
               {/* Avatar */}
               {msg.role === "mentor" && (
-                <div
-                  style={{
-                    width: "28px",
-                    height: "28px",
-                    borderRadius: "8px",
-                    backgroundColor: "#f3f0ff",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "15px",
-                    flexShrink: 0,
-                    border: "1px solid #ddd6fe",
-                  }}
-                >
-                  
+                <div className="w-7 h-7 rounded-lg bg-violet-100 flex items-center justify-center shrink-0 border border-violet-200 shadow-sm">
+                  <Bot size={14} className="text-violet-600" />
                 </div>
               )}
 
               {/* Bubble */}
               <div
-                style={{
-                  maxWidth: "82%",
-                  padding: "10px 13px",
-                  borderRadius: msg.role === "user" ? "14px 14px 4px 14px" : "14px 14px 14px 4px",
-                  backgroundColor: msg.role === "user" ? "#7c3aed" : "#ffffff",
-                  color: msg.role === "user" ? "#ffffff" : "#374151",
-                  border: msg.role === "user" ? "none" : "1px solid #e5e7eb",
-                  boxShadow: msg.role === "mentor" ? "0 1px 4px rgba(0,0,0,0.06)" : "none",
-                }}
+                className={`px-4 py-3 shadow-sm ${
+                  msg.role === "user"
+                    ? "bg-violet-600 text-white rounded-2xl rounded-br-sm"
+                    : "bg-white text-gray-800 border border-gray-200/60 rounded-2xl rounded-bl-sm shadow-[0_2px_10px_-3px_rgba(0,0,0,0.05)]"
+                }`}
               >
                 {msg.role === "user" ? (
-                  <span style={{ fontSize: "11.5px" }}>{msg.content}</span>
+                  <span className="text-[13px] font-medium leading-relaxed">{msg.content}</span>
                 ) : (
                   <MsgText text={msg.content} />
                 )}
@@ -373,47 +271,16 @@ export function MentorAgent() {
 
           {/* Typing indicator */}
           {isTyping && (
-            <div style={{ display: "flex", gap: "8px", alignItems: "flex-end" }}>
-              <div
-                style={{
-                  width: "28px",
-                  height: "28px",
-                  borderRadius: "8px",
-                  backgroundColor: "#f3f0ff",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "15px",
-                  flexShrink: 0,
-                  border: "1px solid #ddd6fe",
-                }}
-              >
-                
+            <div className="flex items-end gap-2.5 max-w-[85%] self-start animate-in fade-in duration-200">
+              <div className="w-7 h-7 rounded-lg bg-violet-100 flex items-center justify-center shrink-0 border border-violet-200 shadow-sm">
+                <Bot size={14} className="text-violet-600" />
               </div>
-              <div
-                style={{
-                  padding: "10px 14px",
-                  backgroundColor: "#ffffff",
-                  borderRadius: "14px 14px 14px 4px",
-                  border: "1px solid #e5e7eb",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "5px",
-                  boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
-                }}
-              >
-                {[0, 0.18, 0.36].map((delay, i) => (
+              <div className="px-4 py-3.5 bg-white border border-gray-200/60 rounded-2xl rounded-bl-sm shadow-[0_2px_10px_-3px_rgba(0,0,0,0.05)] flex items-center gap-1.5">
+                {[0, 150, 300].map((delay, i) => (
                   <div
                     key={i}
-                    className="animate-bounce"
-                    style={{
-                      width: "7px",
-                      height: "7px",
-                      backgroundColor: "#7c3aed",
-                      borderRadius: "50%",
-                      animationDelay: `${delay}s`,
-                      opacity: 0.8,
-                    }}
+                    className="w-1.5 h-1.5 bg-violet-500 rounded-full animate-bounce opacity-80"
+                    style={{ animationDelay: `${delay}ms` }}
                   />
                 ))}
               </div>
@@ -424,37 +291,17 @@ export function MentorAgent() {
         </div>
 
         {/* Quick action chips */}
-        <div
-          style={{
-            padding: "10px 14px 6px",
-            display: "flex",
-            gap: "5px",
-            flexWrap: "wrap",
-            borderTop: "1px solid #f3f4f6",
-            backgroundColor: "#ffffff",
-            flexShrink: 0,
-          }}
-        >
+        <div className="px-5 py-3.5 flex gap-2 overflow-x-auto whitespace-nowrap bg-white border-t border-gray-100 shrink-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden shadow-[0_-4px_10px_rgba(0,0,0,0.02)] z-10">
           {QUICK_ACTIONS.map((action, i) => (
             <button
               key={i}
               onClick={() => sendMessage(action.query)}
               disabled={isTyping}
-              style={{
-                padding: "4px 10px",
-                fontSize: "10px",
-                fontWeight: "600",
-                backgroundColor: "#f3f0ff",
-                color: "#7c3aed",
-                border: "1px solid #ddd6fe",
-                borderRadius: "20px",
-                cursor: isTyping ? "not-allowed" : "pointer",
-                transition: "all 150ms",
-                opacity: isTyping ? 0.5 : 1,
-                whiteSpace: "nowrap",
-              }}
-              onMouseOver={(e) => { if (!isTyping) { e.currentTarget.style.backgroundColor = "#ede9fe"; e.currentTarget.style.borderColor = "#c4b5fd"; } }}
-              onMouseOut={(e) => { e.currentTarget.style.backgroundColor = "#f3f0ff"; e.currentTarget.style.borderColor = "#ddd6fe"; }}
+              className={`px-3.5 py-1.5 text-[11.5px] font-bold bg-violet-50 text-violet-700 border border-violet-100 rounded-full transition-all duration-200 ${
+                isTyping
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:bg-violet-100 hover:-translate-y-0.5 hover:shadow-sm hover:border-violet-200"
+              }`}
             >
               {action.label}
             </button>
@@ -462,62 +309,30 @@ export function MentorAgent() {
         </div>
 
         {/* Input row */}
-        <div
-          style={{
-            padding: "10px 14px 14px",
-            borderTop: "1px solid #e5e7eb",
-            display: "flex",
-            gap: "8px",
-            backgroundColor: "#ffffff",
-            flexShrink: 0,
-          }}
-        >
-          <input
-            ref={inputRef}
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && sendMessage(input)}
-            placeholder="Ask your mentor anything..."
-            disabled={isTyping}
-            style={{
-              flex: 1,
-              padding: "9px 13px",
-              fontSize: "12px",
-              border: "1px solid #e5e7eb",
-              borderRadius: "10px",
-              outline: "none",
-              backgroundColor: "#f8fafc",
-              color: "#374151",
-              fontFamily: "Inter, sans-serif",
-              transition: "border-color 150ms",
-            }}
-            onFocus={(e) => { e.target.style.borderColor = "#7c3aed"; e.target.style.backgroundColor = "#ffffff"; }}
-            onBlur={(e) => { e.target.style.borderColor = "#e5e7eb"; e.target.style.backgroundColor = "#f8fafc"; }}
-          />
-          <button
-            onClick={() => sendMessage(input)}
-            disabled={isTyping || !input.trim()}
-            style={{
-              width: "38px",
-              height: "38px",
-              backgroundColor: isTyping || !input.trim() ? "#f3f4f6" : "#7c3aed",
-              border: "none",
-              borderRadius: "10px",
-              cursor: isTyping || !input.trim() ? "not-allowed" : "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: isTyping || !input.trim() ? "#9ca3af" : "#ffffff",
-              flexShrink: 0,
-              transition: "background 150ms",
-              fontSize: "16px",
-            }}
-            onMouseOver={(e) => { if (!isTyping && input.trim()) e.currentTarget.style.backgroundColor = "#6d28d9"; }}
-            onMouseOut={(e) => { if (!isTyping && input.trim()) e.currentTarget.style.backgroundColor = "#7c3aed"; }}
-          >
-            
-          </button>
+        <div className="p-4 bg-white border-t border-gray-100 shrink-0 relative z-10">
+          <div className="flex items-center gap-2 bg-gray-50 border border-gray-200 p-1.5 rounded-xl focus-within:ring-4 focus-within:ring-violet-500/10 focus-within:border-violet-300 transition-all duration-200 bg-white">
+            <input
+              ref={inputRef}
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && sendMessage(input)}
+              placeholder="Ask anything..."
+              disabled={isTyping}
+              className="flex-1 bg-transparent px-3 py-2 text-[13px] font-medium text-gray-800 placeholder-gray-400 outline-none"
+            />
+            <button
+              onClick={() => sendMessage(input)}
+              disabled={isTyping || !input.trim()}
+              className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 transition-all duration-200 ${
+                isTyping || !input.trim()
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-violet-600 text-white hover:bg-violet-700 shadow-md hover:shadow-lg hover:-translate-y-0.5"
+              }`}
+            >
+              <Send size={15} className={isTyping || !input.trim() ? "" : "translate-x-[-1px] translate-y-[1px]"} />
+            </button>
+          </div>
         </div>
       </div>
     </>

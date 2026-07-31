@@ -199,17 +199,17 @@ export default function SingleAgentSetup() {
 
   if (appState === "WORKSPACE_SANDBOX") {
     return (
-      <div style={{ backgroundColor: "#ffffff", minHeight: "100vh", fontFamily: "Inter, sans-serif", display: "flex", justifyContent: "center", padding: "32px 24px" }}>
-        <div style={{ width: "100%", maxWidth: "1280px", display: "flex", flexDirection: "column", gap: "20px" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <div className="bg-slate-50 min-h-screen font-sans flex justify-center p-8">
+        <div className="w-full max-w-7xl flex flex-col gap-6">
+          <div className="flex items-center justify-between">
             <button
               onClick={() => setAppState("DASHBOARD")}
-              style={{ background: "transparent", border: "none", color: "#374151", fontSize: "10px", fontWeight: "700", display: "flex", alignItems: "center", gap: "6px", cursor: "pointer", textTransform: "uppercase" }}
+              className="flex items-center gap-1.5 text-gray-500 hover:text-gray-900 font-bold text-xs uppercase tracking-wide transition-colors"
             >
             ← Back to Dashboard
             </button>
-            <div style={{ fontSize: "10px", fontWeight: "700", color: "#374151", textTransform: "uppercase" }}>
-              Workspace: <span style={{ color: "#059669" }}>{activeWorkspace?.name || "Team"}</span>
+            <div className="text-xs font-bold text-gray-500 uppercase tracking-wide">
+              Workspace: <span className="text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md">{activeWorkspace?.name || "Team"}</span>
             </div>
           </div>
           <WorkspaceSandbox workspace={activeWorkspace} />
@@ -219,54 +219,43 @@ export default function SingleAgentSetup() {
   }
 
   return (
-    <div style={{ backgroundColor: "#ffffff", height: "100vh", fontFamily: "Inter, sans-serif", display: "flex", flexDirection: "column", padding: "20px 24px", overflow: "hidden" }}>
-      <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: "16px", flex: 1, minHeight: 0 }}>
+    <div className="bg-slate-50 h-screen font-sans flex flex-col p-6 overflow-hidden">
+      <div className="max-w-6xl w-full mx-auto flex flex-col gap-5 flex-1 min-h-0">
 
         {/* Header Navigation */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div className="flex items-center justify-between mt-2">
           <button
             onClick={() => setAppState("DASHBOARD")}
-            style={{ background: "transparent", border: "none", color: "#374151", fontSize: "10px", fontWeight: "700", display: "flex", alignItems: "center", gap: "6px", cursor: "pointer", textTransform: "uppercase" }}
+            className="flex items-center gap-1.5 text-gray-500 hover:text-gray-900 font-bold text-xs uppercase tracking-wide transition-colors"
           >
           ← Continue
           </button>
-          <div style={{ fontSize: "10px", fontWeight: "700", color: "#374151", textTransform: "uppercase" }}>
-            Editing: <span style={{ color: "#7c3aed" }}>{parsedConfig?.name || "New Agent"}</span>
+          <div className="text-xs font-bold text-gray-500 uppercase tracking-wide">
+            Editing: <span className="text-violet-600 bg-violet-50 px-2 py-1 rounded-md">{parsedConfig?.name || "New Agent"}</span>
           </div>
         </div>
 
         {/* Stepper Progress */}
-        <nav style={{ backgroundColor: "#ffffff", border: "1px solid #e5e7eb", borderRadius: "12px", padding: "10px", display: "flex", justifyContent: "space-between", boxShadow: "0 1px 2px 0 rgba(0,0,0,0.05)", flexShrink: 0 }}>
+        <nav className="bg-white border border-gray-200 rounded-2xl p-2.5 flex justify-between shadow-sm flex-shrink-0">
           {steps.map((step, idx) => (
-            <div key={step.id} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <div
-                style={{
-                  display: "flex", alignItems: "center", gap: "12px", padding: "12px 20px", borderRadius: "8px",
-                  backgroundColor: currentStep === step.id ? "#f8fafc" : "transparent",
-                  border: currentStep === step.id ? "1px solid #ddd6fe" : "1px solid transparent",
-                }}
-              >
-                <span style={{ 
-                  display: "flex", alignItems: "center", justifyContent: "center", width: "24px", height: "24px", borderRadius: "50%", 
-                  fontSize: "10px", fontWeight: "700", 
-                  backgroundColor: currentStep === step.id ? "#7c3aed" : "#f3f4f6", 
-                  color: currentStep === step.id ? "#ffffff" : "#374151" 
-                }}>
+            <div key={step.id} className="flex items-center gap-2 flex-1 justify-center">
+              <div className={`flex items-center gap-3 px-6 py-2.5 rounded-xl transition-all duration-200 ${currentStep === step.id ? "bg-violet-50 border border-violet-100" : "border border-transparent"}`}>
+                <span className={`flex items-center justify-center w-6 h-6 rounded-full text-[11px] font-bold ${currentStep === step.id ? "bg-violet-600 text-white shadow-sm shadow-violet-600/30" : "bg-gray-100 text-gray-400"}`}>
                   {step.id}
                 </span>
-                <span style={{ fontSize: "14px", fontWeight: "700", color: currentStep === step.id ? "#7c3aed" : "#374151" }}>
+                <span className={`text-sm font-bold ${currentStep === step.id ? "text-violet-700" : "text-gray-500"}`}>
                   {step.title}
                 </span>
               </div>
-              {idx < steps.length - 1 && <ChevronRight size={16} color="#e5e7eb" style={{ margin: "0 8px" }} />}
+              {idx < steps.length - 1 && <ChevronRight size={18} className="text-gray-300 mx-4" />}
             </div>
           ))}
         </nav>
 
         {/* Step Content */}
-        <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column", backgroundColor: "#ffffff", border: "1px solid #e5e7eb", borderRadius: "12px", overflow: "hidden", boxShadow: "0 1px 2px 0 rgba(0,0,0,0.05)" }}>
+        <div className="flex-1 min-h-0 flex flex-col bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
           {currentStep === 1 && (
-            <div style={{ flex: 1, minHeight: 0, overflowY: "auto" }}>
+            <div className="flex-1 min-h-0 overflow-y-auto">
               <DeveloperTutorial 
               mode={editorMode}
               templateConfig={parsedConfig}
@@ -345,51 +334,52 @@ export default function SingleAgentSetup() {
           )}
 
           {currentStep === 2 && (
-            <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column", gap: "16px", padding: "16px" }}>
+            <div className="flex-1 min-h-0 flex flex-col gap-5 p-6 bg-slate-50/30">
               {/* Success header */}
-              <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "14px 18px", backgroundColor: "#f8fafc", border: "1px solid #e5e7eb", borderRadius: "12px", flexShrink: 0 }}>
-                <CheckCircle2 size={22} color="#059669" />
-                <div>
-                  <h2 style={{ fontSize: "15px", fontWeight: "700", color: "#111827", margin: 0 }}>
-                    Agent Operational
-                  </h2>
-                  <p style={{ margin: "2px 0 0 0", fontSize: "11px", color: "#6b7280" }}>Your agent is live in Lyzr Cloud</p>
+              <div className="flex items-center justify-between px-6 py-4 bg-white border border-emerald-100 shadow-sm rounded-xl shrink-0">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 bg-emerald-50 rounded-full flex items-center justify-center">
+                    <CheckCircle2 size={24} className="text-emerald-600" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-bold text-gray-900 tracking-tight">Agent Operational</h2>
+                    <p className="text-sm text-gray-500">Your agent is live in Lyzr Cloud</p>
+                  </div>
                 </div>
-                <span style={{ marginLeft: "auto", fontSize: "11px", fontWeight: "700", color: "#7c3aed", backgroundColor: "#ffffff", padding: "4px 10px", borderRadius: "6px", border: "1px solid #ddd6fe", fontFamily: "monospace" }}>
-                  ID: {deployedAgentId}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-gray-500 uppercase font-bold tracking-wider">Agent ID</span>
+                  <span className="font-mono text-sm font-bold text-violet-700 bg-violet-50 px-3 py-1.5 rounded-lg border border-violet-100">{deployedAgentId}</span>
+                </div>
               </div>
 
               {/* Two-pane split: Integration Code | Live Chat */}
-              <div style={{ flex: 1, minHeight: 0, display: "flex", gap: "16px" }}>
-                <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
+              <div className="flex-1 min-h-0 flex gap-5">
+                <div className="flex-1 min-w-0 flex flex-col bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
                   <CodeExporter config={parsedConfig || {}} tutorialCode={tutorialCode} />
                 </div>
-                <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
+                <div className="flex-1 min-w-0 flex flex-col bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
                   <AgentSandbox config={parsedConfig || {}} user={user} authToken={authToken} />
                 </div>
               </div>
 
               {/* Deploy Action Row */}
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 18px", backgroundColor: "#f8fafc", border: "1px solid #e5e7eb", borderRadius: "12px", flexShrink: 0 }}>
-                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                  <span style={{ fontSize: "13px", fontWeight: "700", color: "#111827" }}>Ship your agent to Lyzr Cloud</span>
-                  <span style={{ fontSize: "12px", color: "#6b7280" }}>Agent ID: <code style={{ fontFamily: "monospace", color: "#7c3aed", backgroundColor: "#f3f0ff", padding: "2px 6px", borderRadius: "4px" }}>{deployedAgentId}</code></span>
+              <div className="flex items-center justify-between px-6 py-4 bg-white border border-gray-200 rounded-xl shrink-0 shadow-sm">
+                <div>
+                  <h3 className="text-sm font-bold text-gray-900">Ship your agent to Lyzr Cloud</h3>
+                  <p className="text-xs text-gray-500 mt-0.5">Use the snippet in CodeExporter or launch the live URL.</p>
                 </div>
-                <div style={{ display: "flex", gap: "12px" }}>
+                <div className="flex gap-3">
                   <button
-                    onClick={() => {
-                      navigator.clipboard.writeText(deployedAgentId || "");
-                    }}
-                    style={{ display: "flex", alignItems: "center", gap: "6px", padding: "10px 16px", fontSize: "13px", fontWeight: "600", backgroundColor: "#ffffff", border: "1px solid #e5e7eb", color: "#374151", borderRadius: "8px", cursor: "pointer" }}
+                    onClick={() => navigator.clipboard.writeText(deployedAgentId || "")}
+                    className="px-5 py-2.5 text-sm font-bold bg-white text-gray-700 border border-gray-200 rounded-lg shadow-sm hover:bg-gray-50 transition-colors"
                   >
                      Copy Agent ID
                   </button>
                   <button
                     onClick={() => window.open("https://studio.lyzr.ai", "_blank")}
-                    style={{ display: "flex", alignItems: "center", gap: "6px", padding: "10px 20px", fontSize: "13px", fontWeight: "700", backgroundColor: "#7c3aed", border: "none", color: "#ffffff", borderRadius: "8px", cursor: "pointer", boxShadow: "0 2px 8px rgba(124,58,237,0.3)" }}
+                    className="px-5 py-2.5 text-sm font-bold bg-violet-600 text-white rounded-lg shadow-sm hover:bg-violet-700 hover:shadow-md transition-all"
                   >
-                    Deploy to Website
+                    Manage Deployments
                   </button>
                 </div>
               </div>

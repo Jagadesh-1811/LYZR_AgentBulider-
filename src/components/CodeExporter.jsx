@@ -126,36 +126,34 @@ if __name__ == "__main__":
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100%", backgroundColor: "#ffffff", border: "1px solid #e5e7eb", borderRadius: "12px", overflow: "hidden", fontFamily: "Inter, sans-serif" }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px", backgroundColor: "#f8fafc", borderBottom: "1px solid #e5e7eb" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "11px", fontWeight: "700", textTransform: "uppercase", color: "#374151" }}>
-          <FileCode size={14} color="#7c3aed" />
+    <div className="flex flex-col h-full bg-white border border-gray-200 rounded-2xl overflow-hidden font-sans shadow-sm">
+      
+      {/* Header */}
+      <div className="flex items-center justify-between px-5 py-3.5 bg-gray-50 border-b border-gray-200">
+        <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-gray-500">
+          <FileCode size={16} className="text-violet-600" />
           <span>Integration Code (Editable)</span>
         </div>
-        <div style={{ display: "flex", gap: "8px" }}>
+        <div className="flex gap-2">
           <button
             onClick={saveToFile}
-            style={{ display: "flex", alignItems: "center", gap: "6px", padding: "6px 12px", fontSize: "11px", fontWeight: "700", backgroundColor: "#ffffff", border: "1px solid #e5e7eb", color: "#374151", borderRadius: "6px", cursor: "pointer", transition: "all 0.15s ease-in-out" }}
-            onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
-            onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#ffffff'}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold bg-white border border-gray-200 text-gray-700 rounded-lg shadow-sm hover:bg-gray-50 transition-colors"
           >
-            <Save size={12} />
+            <Save size={14} />
             <span>Save</span>
           </button>
           <button
             onClick={copyToClipboard}
-            style={{ display: "flex", alignItems: "center", gap: "6px", padding: "6px 12px", fontSize: "11px", fontWeight: "700", backgroundColor: "#ffffff", border: "1px solid #e5e7eb", color: "#374151", borderRadius: "6px", cursor: "pointer", transition: "all 0.15s ease-in-out" }}
-            onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
-            onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#ffffff'}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold bg-white border border-gray-200 text-gray-700 rounded-lg shadow-sm hover:bg-gray-50 transition-colors"
           >
             {copied ? (
               <>
-                <Check size={12} color="#059669" />
-                <span style={{ color: "#059669" }}>Copied!</span>
+                <Check size={14} className="text-emerald-600" />
+                <span className="text-emerald-600">Copied!</span>
               </>
             ) : (
               <>
-                <Copy size={12} />
+                <Copy size={14} />
                 <span>Copy</span>
               </>
             )}
@@ -163,28 +161,28 @@ if __name__ == "__main__":
         </div>
       </div>
 
-      <div style={{ display: "flex", backgroundColor: "#f8fafc", padding: "8px 16px", gap: "8px", borderBottom: "1px solid #e5e7eb", overflowX: "auto" }}>
+      {/* Tabs */}
+      <div className="flex items-center bg-gray-50 px-4 py-2 gap-2 border-b border-gray-200 overflow-x-auto">
         <button
           onClick={() => setActiveTab("python")}
-          style={{ 
-            display: "flex", alignItems: "center", gap: "6px", padding: "8px 12px", fontSize: "12px", fontWeight: "700", borderRadius: "6px", cursor: "pointer",
-            backgroundColor: activeTab === "python" ? "#7c3aed" : "transparent", color: activeTab === "python" ? "#ffffff" : "#374151", border: "none"
-          }}
+          className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-lg transition-colors ${
+            activeTab === "python" ? "bg-violet-600 text-white shadow-sm" : "bg-transparent text-gray-600 hover:bg-gray-200"
+          }`}
         >
-          <Code size={12} /> API Access
+          <Code size={14} /> API Access
         </button>
         <button
           onClick={() => setActiveTab("sdk")}
-          style={{ 
-            display: "flex", alignItems: "center", gap: "6px", padding: "8px 12px", fontSize: "12px", fontWeight: "700", borderRadius: "6px", cursor: "pointer",
-            backgroundColor: activeTab === "sdk" ? "#7c3aed" : "transparent", color: activeTab === "sdk" ? "#ffffff" : "#374151", border: "none"
-          }}
+          className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-lg transition-colors ${
+            activeTab === "sdk" ? "bg-violet-600 text-white shadow-sm" : "bg-transparent text-gray-600 hover:bg-gray-200"
+          }`}
         >
-          <Layers size={12} /> Automata SDK Code
+          <Layers size={14} /> Automata SDK Code
         </button>
       </div>
 
-      <div style={{ flex: 1, padding: 0, backgroundColor: "#111827", display: "flex", flexDirection: "column" }}>
+      {/* Code Area */}
+      <div className="flex-1 p-0 bg-[#1e1e1e] flex flex-col relative group">
         <textarea
           value={activeTab === "python" ? customPython : customSdk}
           onChange={(e) => {
@@ -192,23 +190,7 @@ if __name__ == "__main__":
             else setCustomSdk(e.target.value);
           }}
           spellCheck="false"
-          style={{
-            flex: 1,
-            width: "100%",
-            margin: 0,
-            padding: "16px",
-            backgroundColor: "transparent",
-            color: "#f8fafc",
-            fontFamily: "monospace",
-            fontSize: "12px",
-            lineHeight: "20px",
-            border: "none",
-            outline: "none",
-            resize: "none",
-            whiteSpace: "pre-wrap",
-            wordBreak: "break-word",
-            overflow: "auto"
-          }}
+          className="flex-1 w-full m-0 p-5 bg-transparent text-[#d4d4d4] font-mono text-[13px] leading-relaxed border-none outline-none resize-none"
         />
       </div>
     </div>

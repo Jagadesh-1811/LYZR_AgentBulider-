@@ -41,3 +41,12 @@
     @apply bg-surface-base text-text-primary font-inter text-[12px] leading-[16px] antialiased;
   }
 }
+
+/* Hide all scrollbars globally */
+*::-webkit-scrollbar {
+  display: none;
+}
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
