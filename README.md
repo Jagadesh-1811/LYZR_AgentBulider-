@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./public/logo.png" alt="Lyzr Forge Logo" width="200"/>
+  
   <h1> Lyzr Forge </h1>
   <p><strong>The Next-Gen AI Agent Developer Studio</strong></p>
   
@@ -63,12 +63,12 @@ graph TD
     classDef db fill:#10B981,stroke:#047857,stroke-width:2px,color:#fff,rx:8px,ry:8px;
 
     %% Nodes
-    A[👨‍💻 Developer Input]:::secondary
+    A[Developer Input]:::secondary
     B(Interactive Agent Editor):::primary
     C(Knowledge Base / RAG):::db
     D{Lyzr Automata SDK}:::primary
     E(Live Sandbox Chat):::secondary
-    F[🚀 One-Click Deployment]:::primary
+    F[ One-Click Deployment]:::primary
 
     %% Flow
     A -->|Persona & Models| B
