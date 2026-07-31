@@ -142,6 +142,12 @@ const TEMPLATE_CATEGORIES = [
   },
 ];
 
+TEMPLATE_CATEGORIES.forEach(cat => cat.templates.forEach(t => {
+  t.config.description = t.description;
+  t.config.role = t.name;
+  t.config.ragText = `Knowledge Base for ${t.name}\n\nOverview: ${t.description}\n\nAdd your specific company data, policies, FAQs, or API documentation here so the agent can reference it during conversations.`;
+}));
+
 const ALL_TEMPLATES = TEMPLATE_CATEGORIES.flatMap((cat) =>
   cat.templates.map((t) => ({ ...t, category: cat }))
 );
@@ -322,7 +328,7 @@ export default function TemplateBrowser({ onSelectTemplate, onBack }) {
                       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "10px", borderTop: "1px solid #f3f4f6" }}>
                         <span style={{ fontSize: "11px", color: "#9ca3af" }}>Model: <strong style={{ color: "#374151" }}>{config.model}</strong></span>
                         <button
-                          onClick={(e) => { e.stopPropagation(); onSelectTemplate(config); }}
+                          onClick={(e) => { e.stopPropagation(); onSelectTemplate({ ...config, description, role: name }); }}
                           style={{
                             display: "flex", alignItems: "center", gap: "5px",
                             padding: "7px 14px", fontSize: "11px", fontWeight: "700",

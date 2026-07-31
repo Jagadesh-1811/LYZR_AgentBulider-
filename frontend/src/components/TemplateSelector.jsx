@@ -112,6 +112,12 @@ const TEMPLATE_CATEGORIES = [
 ];
 
 // flatten for "All" tab
+TEMPLATE_CATEGORIES.forEach(cat => cat.templates.forEach(t => {
+  t.config.description = t.description;
+  t.config.role = t.name;
+  t.config.ragText = `Knowledge Base for ${t.name}\n\nOverview: ${t.description}\n\nAdd your specific company data, policies, FAQs, or API documentation here so the agent can reference it during conversations.`;
+}));
+
 const ALL_TEMPLATES = TEMPLATE_CATEGORIES.flatMap((cat) =>
   cat.templates.map((t) => ({ ...t, category: cat }))
 );

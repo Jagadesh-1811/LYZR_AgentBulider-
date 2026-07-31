@@ -1,5 +1,5 @@
 const axios = require('axios');
-require('dotenv').config({ path: '../../.env' });
+require('dotenv').config({ path: '../../frontend/.env' });
 
 async function createLyzrAgent() {
     const LYZR_API_KEY = process.env.LYZR_API_KEY;

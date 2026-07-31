@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
-export function RagSetup({ codeValues, onComplete }) {
-  const [enableRag, setEnableRag] = useState(false);
+export function RagSetup({ codeValues, templateConfig, onComplete }) {
+  const [enableRag, setEnableRag] = useState(!!(templateConfig && templateConfig.ragText));
   const [ragUrl, setRagUrl] = useState('https://docs.lyzr.ai/');
-  const [ragText, setRagText] = useState('');
+  const [ragText, setRagText] = useState((templateConfig && templateConfig.ragText) || '');
   const [ragFile, setRagFile] = useState(null);
   
   // Advanced RAG Settings
@@ -35,7 +35,7 @@ from lyzr_automata.ai_models.gemini import GeminiModel
 
 # Agent Setup: ${codeValues?.agentName || 'My Agent'}
 AGENT_NAME = "${codeValues?.agentName || 'My Agent'}"
-${hasUrl  ? `RAG_URL = "${ragUrl}"\n` : ''}${hasText ? `RAG_TEXT = """\n${ragText.slice(0, 300)}${ragText.length > 300 ? '...' : ''}\n"""\n` : ''}${hasFile ? `RAG_FILE = "${ragFile.name}"\n` : ''}
+${hasUrl  ? `RAG_URL = "${ragUrl}"\n` : ''}${hasText ? `RAG_TEXT = """\n${ragText.slice(0, 200000)}${ragText.length > 200000 ? '...' : ''}\n"""\n` : ''}${hasFile ? `RAG_FILE = "${ragFile.name}"\n` : ''}
 # Task 1: Configure Model
 gemini_model = GeminiModel(
     parameters={

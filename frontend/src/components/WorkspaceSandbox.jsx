@@ -224,9 +224,9 @@ export default function WorkspaceSandbox({ workspace = { name: "Team", agents: [
       const totalTokens = runLogs.reduce((sum, l) => sum + (l.tokens?.total_tokens ?? 0), 0);
       const totalSecs = data.totalDurationMs != null ? `${(data.totalDurationMs / 1000).toFixed(1)}s` : "?";
       const runSummary =
-        `\n\n**⚡ Run summary**\n${tokenLines}\n- **Total:** ${totalTokens} tokens · ${totalSecs}\n`;
+        `\n\n** Run summary**\n${tokenLines}\n- **Total:** ${totalTokens} tokens · ${totalSecs}\n`;
       const summaryContent =
-        `${data.result}\n\n---\n${runSummary}\n---\n\n### ⚙️ Exact pipeline code executed\n\n\`\`\`python\n${exactCode}\n\`\`\``;
+        `${data.result}\n\n---\n${runSummary}`;
       setMessages((prev) => [...prev, { role: "assistant", content: summaryContent }]);
     } else if (data.type === "error") {
       pushEvent({

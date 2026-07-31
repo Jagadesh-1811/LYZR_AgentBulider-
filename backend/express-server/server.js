@@ -7,7 +7,7 @@ const FormData = require('form-data');
 const fs = require('fs');
 
 const upload = multer({ dest: 'uploads/' });
-require('dotenv').config({ path: '../../.env' });
+require('dotenv').config({ path: '../../frontend/.env' });
 
 const app = express();
 

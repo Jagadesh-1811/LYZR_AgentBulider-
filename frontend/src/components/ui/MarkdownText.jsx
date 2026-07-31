@@ -214,6 +214,53 @@ function renderBlocks(text) {
       continue;
     }
 
+    // Tables
+    if (/^\s*\|.*\|\s*$/.test(line)) {
+      const tableLines = [];
+      while (i < lines.length && /^\s*\|.*\|\s*$/.test(lines[i])) {
+        tableLines.push(lines[i]);
+        i++;
+      }
+      
+      const renderRow = (rowLine, isHeader, rowIndex) => {
+        // Split by pipe, ignoring the first and last empty segments
+        const cells = rowLine.split('|').slice(1, -1);
+        return (
+          <tr key={`tr${rowIndex}`}>
+            {cells.map((cell, cIndex) => {
+              const content = renderInline(cell.trim(), `td${rowIndex}_${cIndex}_`);
+              return isHeader ? (
+                <th key={cIndex} style={{ border: "1px solid #e5e7eb", padding: "8px 12px", backgroundColor: "#f9fafb", textAlign: "left", fontWeight: 700 }}>
+                  {content}
+                </th>
+              ) : (
+                <td key={cIndex} style={{ border: "1px solid #e5e7eb", padding: "8px 12px" }}>
+                  {content}
+                </td>
+              );
+            })}
+          </tr>
+        );
+      };
+
+      // Filter out the separator line (e.g. |---|---|)
+      const rows = tableLines.filter(l => !/^\s*\|([-:\s]+\|)+\s*$/.test(l));
+      
+      blocks.push(
+        <div key={`b${blocks.length}`} style={{ overflowX: "auto", margin: "12px 0", borderRadius: "6px", border: "1px solid #e5e7eb" }}>
+          <table style={{ borderCollapse: "collapse", width: "100%", fontSize: "12px", color: "#374151" }}>
+            <thead>
+              {rows.length > 0 && renderRow(rows[0], true, 0)}
+            </thead>
+            <tbody>
+              {rows.slice(1).map((r, rIndex) => renderRow(r, false, rIndex + 1))}
+            </tbody>
+          </table>
+        </div>
+      );
+      continue;
+    }
+
     // Numbered list
     const num = line.match(/^\s*(\d+)[.)]\s+(.*)$/);
     if (num) {

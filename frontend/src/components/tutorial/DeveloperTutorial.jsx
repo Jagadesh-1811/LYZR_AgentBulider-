@@ -83,6 +83,7 @@ export function DeveloperTutorial({ mode, templateConfig, onComplete, onCancel }
           {currentScreen === 'rag' && (
             <RagSetup
               codeValues={editorConfig}
+              templateConfig={templateConfig}
               onComplete={(code, fullConfig) => {
                 setFinalCode(code);
                 setFinalConfig(fullConfig);
