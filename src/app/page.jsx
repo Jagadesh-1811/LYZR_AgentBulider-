@@ -219,9 +219,9 @@ export default function SingleAgentSetup() {
   }
 
   return (
-    <div style={{ backgroundColor: "#ffffff", minHeight: "100vh", fontFamily: "Inter, sans-serif", display: "flex", justifyContent: "center", padding: "32px 24px" }}>
-      <div style={{ width: "100%", maxWidth: "1024px", display: "flex", flexDirection: "column", gap: "20px" }}>
-        
+    <div style={{ backgroundColor: "#ffffff", height: "100vh", fontFamily: "Inter, sans-serif", display: "flex", flexDirection: "column", padding: "20px 24px", overflow: "hidden" }}>
+      <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: "16px", flex: 1, minHeight: 0 }}>
+
         {/* Header Navigation */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <button
@@ -236,7 +236,7 @@ export default function SingleAgentSetup() {
         </div>
 
         {/* Stepper Progress */}
-        <nav style={{ backgroundColor: "#ffffff", border: "1px solid #e5e7eb", borderRadius: "12px", padding: "10px", display: "flex", justifyContent: "space-between", boxShadow: "0 1px 2px 0 rgba(0,0,0,0.05)" }}>
+        <nav style={{ backgroundColor: "#ffffff", border: "1px solid #e5e7eb", borderRadius: "12px", padding: "10px", display: "flex", justifyContent: "space-between", boxShadow: "0 1px 2px 0 rgba(0,0,0,0.05)", flexShrink: 0 }}>
           {steps.map((step, idx) => (
             <div key={step.id} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <div
@@ -264,9 +264,10 @@ export default function SingleAgentSetup() {
         </nav>
 
         {/* Step Content */}
-        <div style={{ backgroundColor: "#ffffff", border: "1px solid #e5e7eb", borderRadius: "12px", overflow: "hidden", boxShadow: "0 1px 2px 0 rgba(0,0,0,0.05)" }}>
+        <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column", backgroundColor: "#ffffff", border: "1px solid #e5e7eb", borderRadius: "12px", overflow: "hidden", boxShadow: "0 1px 2px 0 rgba(0,0,0,0.05)" }}>
           {currentStep === 1 && (
-            <DeveloperTutorial 
+            <div style={{ flex: 1, minHeight: 0, overflowY: "auto" }}>
+              <DeveloperTutorial 
               mode={editorMode}
               templateConfig={parsedConfig}
               onCancel={() => setAppState("DASHBOARD")}
@@ -340,31 +341,37 @@ export default function SingleAgentSetup() {
                 setCurrentStep(2);
               }}
             />
+            </div>
           )}
 
           {currentStep === 2 && (
-            <div style={{ padding: "28px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "12px", borderBottom: "1px solid #f3f4f6", paddingBottom: "12px", marginBottom: "24px" }}>
-                <CheckCircle2 size={24} color="#059669" />
-                <h2 style={{ fontSize: "18px", fontWeight: "700", color: "#111827", margin: 0 }}>
-                  Agent Operational
-                </h2>
-                <span style={{ marginLeft: "auto", fontSize: "12px", fontWeight: "700", color: "#7c3aed", backgroundColor: "#f8fafc", padding: "4px 8px", borderRadius: "6px", border: "1px solid #ddd6fe" }}>
+            <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column", gap: "16px", padding: "16px" }}>
+              {/* Success header */}
+              <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "14px 18px", backgroundColor: "#f8fafc", border: "1px solid #e5e7eb", borderRadius: "12px", flexShrink: 0 }}>
+                <CheckCircle2 size={22} color="#059669" />
+                <div>
+                  <h2 style={{ fontSize: "15px", fontWeight: "700", color: "#111827", margin: 0 }}>
+                    Agent Operational
+                  </h2>
+                  <p style={{ margin: "2px 0 0 0", fontSize: "11px", color: "#6b7280" }}>Your agent is live in Lyzr Cloud</p>
+                </div>
+                <span style={{ marginLeft: "auto", fontSize: "11px", fontWeight: "700", color: "#7c3aed", backgroundColor: "#ffffff", padding: "4px 10px", borderRadius: "6px", border: "1px solid #ddd6fe", fontFamily: "monospace" }}>
                   ID: {deployedAgentId}
                 </span>
               </div>
-              
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px", marginBottom: "24px" }}>
-                <div style={{ height: "600px" }}>
+
+              {/* Two-pane split: Integration Code | Live Chat */}
+              <div style={{ flex: 1, minHeight: 0, display: "flex", gap: "16px" }}>
+                <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
                   <CodeExporter config={parsedConfig || {}} tutorialCode={tutorialCode} />
                 </div>
-                <div style={{ height: "600px" }}>
+                <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
                   <AgentSandbox config={parsedConfig || {}} user={user} authToken={authToken} />
                 </div>
               </div>
 
               {/* Deploy Action Row */}
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px", backgroundColor: "#f8fafc", border: "1px solid #e5e7eb", borderRadius: "12px" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 18px", backgroundColor: "#f8fafc", border: "1px solid #e5e7eb", borderRadius: "12px", flexShrink: 0 }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
                   <span style={{ fontSize: "13px", fontWeight: "700", color: "#111827" }}>Ship your agent to Lyzr Cloud</span>
                   <span style={{ fontSize: "12px", color: "#6b7280" }}>Agent ID: <code style={{ fontFamily: "monospace", color: "#7c3aed", backgroundColor: "#f3f0ff", padding: "2px 6px", borderRadius: "4px" }}>{deployedAgentId}</code></span>

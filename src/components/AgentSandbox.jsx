@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { MessageSquare, RefreshCw, Send, Loader2, Bot, User, Database, Link, Type, Check, X, FileUp } from "lucide-react";
+import MarkdownText from "@/components/ui/MarkdownText";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, setDoc, updateDoc, arrayUnion } from "firebase/firestore";
 
@@ -375,7 +376,11 @@ export default function AgentSandbox({ config = {}, user, authToken }) {
                   borderBottomLeftRadius: !isUser ? "4px" : "16px",
                   boxShadow: "0 1px 2px 0 rgba(0,0,0,0.05)"
                 }}>
-                  {msg.text}
+                  {isUser ? (
+                    msg.text
+                  ) : (
+                    <MarkdownText text={msg.text} />
+                  )}
                 </div>
                 {!isUser && msg.tokens && (
                   <div style={{ alignSelf: "flex-start", display: "flex", alignItems: "center", gap: "4px", fontSize: "10px", color: "#6b7280", paddingLeft: "8px" }}>

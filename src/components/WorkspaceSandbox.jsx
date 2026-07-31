@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { Send, Users, Activity, CheckCircle2, Copy } from "lucide-react";
+import MarkdownText from "@/components/ui/MarkdownText";
 
 export default function WorkspaceSandbox({ workspace }) {
   const [messages, setMessages] = useState([]);
@@ -127,9 +128,11 @@ export default function WorkspaceSandbox({ workspace }) {
                       : "bg-[#f8fafc] text-[#111827] border border-[#e5e7eb] rounded-bl-sm"
                   }`}
                 >
-                  {msg.content.split('\\n').map((line, j) => (
-                    <span key={j}>{line}<br/></span>
-                  ))}
+                  {msg.role === "user" ? (
+                    msg.content
+                  ) : (
+                    <MarkdownText text={msg.content} />
+                  )}
                 </div>
               </div>
             ))}

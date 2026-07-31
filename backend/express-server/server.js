@@ -384,11 +384,13 @@ app.post('/api/stream-agent', authenticateToken, async (req, res) => {
         });
     } catch (error) {
         const status = error.response?.status || 500;
+        // NOTE: with responseType 'stream' a non-2xx body arrives as a stream,
+        // not parsed JSON, so response.data.detail is usually unavailable.
         const rawDetail = error.response?.data?.detail;
         const detail = Array.isArray(rawDetail)
             ? rawDetail.map(d => d.msg).join('; ')
-            : (rawDetail || error.response?.data?.message || error.message);
-        console.error("Agent stream failed:", status, detail);
+            : (typeof rawDetail === 'string' ? rawDetail : error.response?.data?.message);
+        console.error("Agent stream failed:", status, detail || error.message);
         res.status(status).json({
             success: false,
             error: typeof detail === 'string' && detail !== "An unexpected error occurred."
