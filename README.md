@@ -36,9 +36,10 @@ We use a modern, highly performant stack to ensure maximum productivity and aest
 - **Next.js & React**: The core framework for our blisteringly fast, Server-Side Rendered (SSR) frontend application.
 - **Tailwind CSS**: Powers the ultra-premium design system, smooth hover elevations, and complex gradient animations.
 - **Lucide Icons**: Sleek, scalable vector icons that give the UI a polished, modern tech aesthetic.
-- **Lyzr Automata SDK 2.0**: The underlying AI engine that handles agent behaviors, task execution, and Large Language Model (LLM) interfacing.
+- **Lyzr REST API Services**: The core intelligence layer used to build, orchestrate, and interface with the AI agents via scalable API endpoints.
 - **Native RAG (Retrieval-Augmented Generation)**: The AI paradigm used to ingest external data and inject it dynamically into the agent's context.
 - **Express / Node.js**: The robust backend architecture handling agent telemetry, sandbox routing, and one-click deployment pipelines.
+- **Lyzr Cloud**: The entire backend infrastructure and agent ecosystem is fully managed and maintained by Lyzr Cloud, ensuring enterprise-grade scalability, security, and zero-maintenance overhead.
 
 ---
 
