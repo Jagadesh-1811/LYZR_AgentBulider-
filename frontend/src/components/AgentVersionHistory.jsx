@@ -12,7 +12,7 @@ export default function AgentVersionHistory({ agent, onClose, onRollbackComplete
   useEffect(() => {
     const fetchVersions = async () => {
       try {
-        const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+      const baseUrl = "https://lyzr-agent-bulider.vercel.app";
         const res = await fetch(`${baseUrl}/api/versions/${agent.agentId}`, {
           headers: { Authorization: `Bearer ${authToken}` }
         });
@@ -41,7 +41,7 @@ export default function AgentVersionHistory({ agent, onClose, onRollbackComplete
     setError("");
     
     try {
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+      const baseUrl = "https://lyzr-agent-bulider.vercel.app";
       const res = await fetch(`${baseUrl}/api/versions/rollback`, {
         method: "POST",
         headers: {

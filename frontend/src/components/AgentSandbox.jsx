@@ -102,7 +102,7 @@ export default function AgentSandbox({ config = {}, user, authToken: initAuthTok
       let streamedResponse = "";
 
       const authToken = !isPublic ? (initAuthToken || localStorage.getItem("lyzr_auth_token")) : null;
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+      const baseUrl = "https://lyzr-agent-bulider.vercel.app";
       const endpoint = isPublic ? `${baseUrl}/api/public/stream-agent` : `${baseUrl}/api/stream-agent`;
       const headers = { "Content-Type": "application/json" };
       if (authToken) headers["Authorization"] = `Bearer ${authToken}`;
@@ -215,7 +215,7 @@ export default function AgentSandbox({ config = {}, user, authToken: initAuthTok
         };
       }
 
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+      const baseUrl = "https://lyzr-agent-bulider.vercel.app";
       const response = await fetch(`${baseUrl}/api/upload-knowledge`, {
         method: "POST",
         headers,

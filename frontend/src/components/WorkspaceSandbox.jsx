@@ -319,7 +319,7 @@ export default function WorkspaceSandbox({ workspace = { name: "Team", agents: [
 
     try {
       const token = !isPublic ? localStorage.getItem("lyzr_auth_token") : null;
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+      const baseUrl = "https://lyzr-agent-bulider.vercel.app";
       const endpoint = isPublic ? `${baseUrl}/api/public/run-workspace` : `${baseUrl}/api/run-workspace`;
       const headers = { "Content-Type": "application/json" };
       if (token) headers["Authorization"] = `Bearer ${token}`;

@@ -121,7 +121,7 @@ export default function SingleAgentSetup() {
     
     setIsDeploying(true);
     try {
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+      const baseUrl = "https://lyzr-agent-bulider.vercel.app";
       const response = await fetch(`${baseUrl}/api/deploy-agent`, {
         method: "POST",
         headers: { 
@@ -282,7 +282,7 @@ export default function SingleAgentSetup() {
 
                 setIsDeploying(true);
                 try {
-                  const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+                  const baseUrl = "https://lyzr-agent-bulider.vercel.app";
                   const response = await fetch(`${baseUrl}/api/deploy-agent`, {
                     method: "POST",
                     headers: { 
