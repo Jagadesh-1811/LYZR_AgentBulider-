@@ -7,7 +7,8 @@ import { doc, getDoc } from "firebase/firestore";
 import { Loader2 } from "lucide-react";
 
 export default function PublicAgentPage({ params }) {
-  const { id } = params;
+  const unwrappedParams = React.use(params);
+  const id = unwrappedParams.id;
   const [config, setConfig] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

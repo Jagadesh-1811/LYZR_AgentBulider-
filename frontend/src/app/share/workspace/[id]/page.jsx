@@ -7,7 +7,8 @@ import { doc, getDoc } from "firebase/firestore";
 import { Loader2 } from "lucide-react";
 
 export default function PublicWorkspacePage({ params }) {
-  const { id } = params;
+  const unwrappedParams = React.use(params);
+  const id = unwrappedParams.id;
   const [workspace, setWorkspace] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
