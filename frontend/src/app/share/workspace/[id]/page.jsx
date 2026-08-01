@@ -25,7 +25,7 @@ export default function PublicWorkspacePage({ params }) {
         }
       } catch (err) {
         console.error("Failed to fetch workspace:", err);
-        setError("Failed to load workspace.");
+        setError(`Failed to load workspace: ${err.message}`);
       } finally {
         setLoading(false);
       }
