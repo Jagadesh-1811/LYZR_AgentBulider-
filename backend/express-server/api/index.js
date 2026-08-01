@@ -8,7 +8,7 @@ const fs = require('fs');
 const os = require('os');
 
 const upload = multer({ dest: os.tmpdir() });
-require('dotenv').config({ path: '../../frontend/.env' });
+require('dotenv').config({ path: '../../../frontend/.env' });
 
 const app = express();
 
