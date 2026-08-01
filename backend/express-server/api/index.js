@@ -14,8 +14,7 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
-app.use(cors({ origin: frontendUrl }));
+app.use(cors()); // Allow all origins to prevent Vercel preview URL issues
 
 // --- Mock Databases ---
 const usersDB = [
