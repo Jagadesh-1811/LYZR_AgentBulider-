@@ -102,7 +102,8 @@ export default function AgentSandbox({ config = {}, user, authToken: initAuthTok
       let streamedResponse = "";
 
       const authToken = !isPublic ? (initAuthToken || localStorage.getItem("lyzr_auth_token")) : null;
-      const endpoint = isPublic ? "http://localhost:4000/api/public/stream-agent" : "http://localhost:4000/api/stream-agent";
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+      const endpoint = isPublic ? `${baseUrl}/api/public/stream-agent` : `${baseUrl}/api/stream-agent`;
       const headers = { "Content-Type": "application/json" };
       if (authToken) headers["Authorization"] = `Bearer ${authToken}`;
 
@@ -214,7 +215,8 @@ export default function AgentSandbox({ config = {}, user, authToken: initAuthTok
         };
       }
 
-      const response = await fetch("http://localhost:4000/api/upload-knowledge", {
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+      const response = await fetch(`${baseUrl}/api/upload-knowledge`, {
         method: "POST",
         headers,
         body

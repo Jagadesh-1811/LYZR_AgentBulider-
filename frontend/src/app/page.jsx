@@ -121,7 +121,8 @@ export default function SingleAgentSetup() {
     
     setIsDeploying(true);
     try {
-      const response = await fetch("http://localhost:4000/api/deploy-agent", {
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+      const response = await fetch(`${baseUrl}/api/deploy-agent`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
@@ -281,7 +282,8 @@ export default function SingleAgentSetup() {
 
                 setIsDeploying(true);
                 try {
-                  const response = await fetch("http://localhost:4000/api/deploy-agent", {
+                  const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+                  const response = await fetch(`${baseUrl}/api/deploy-agent`, {
                     method: "POST",
                     headers: { 
                       "Content-Type": "application/json",

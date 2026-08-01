@@ -256,7 +256,8 @@ export default function WorkspaceSandbox({ workspace = { name: "Team", agents: [
 
     try {
       const token = !isPublic ? localStorage.getItem("lyzr_auth_token") : null;
-      const endpoint = isPublic ? "http://localhost:4000/api/public/run-workspace" : "http://localhost:4000/api/run-workspace";
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+      const endpoint = isPublic ? `${baseUrl}/api/public/run-workspace` : `${baseUrl}/api/run-workspace`;
       const headers = { "Content-Type": "application/json" };
       if (token) headers["Authorization"] = `Bearer ${token}`;
 

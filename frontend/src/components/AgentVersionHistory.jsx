@@ -12,7 +12,8 @@ export default function AgentVersionHistory({ agent, onClose, onRollbackComplete
   useEffect(() => {
     const fetchVersions = async () => {
       try {
-        const res = await fetch(`http://localhost:4000/api/versions/${agent.agentId}`, {
+        const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+        const res = await fetch(`${baseUrl}/api/versions/${agent.agentId}`, {
           headers: { Authorization: `Bearer ${authToken}` }
         });
         const data = await res.json();
@@ -40,7 +41,8 @@ export default function AgentVersionHistory({ agent, onClose, onRollbackComplete
     setError("");
     
     try {
-      const res = await fetch(`http://localhost:4000/api/versions/rollback`, {
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+      const res = await fetch(`${baseUrl}/api/versions/rollback`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -22,7 +22,8 @@ export default function LoginScreen({ onLoginSuccess }) {
     const payload = isLogin ? { email, password } : { email, password, name };
 
     try {
-      const res = await fetch(`http://localhost:4000${endpoint}`, {
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+      const res = await fetch(`${baseUrl}${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
@@ -46,7 +47,8 @@ export default function LoginScreen({ onLoginSuccess }) {
       const result = await signInWithPopup(auth, googleProvider);
       
       // Exchange Firebase user info for our custom JWT
-      const res = await fetch('http://localhost:4000/api/auth/google', {
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+      const res = await fetch(`${baseUrl}/api/auth/google`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
