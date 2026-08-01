@@ -5,8 +5,9 @@ const cors = require('cors');
 const multer = require('multer');
 const FormData = require('form-data');
 const fs = require('fs');
+const os = require('os');
 
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({ dest: os.tmpdir() });
 require('dotenv').config({ path: '../../frontend/.env' });
 
 const app = express();
@@ -535,6 +536,10 @@ app.post('/api/run-workspace', authenticateToken, runWorkspaceHandler);
 app.post('/api/public/run-workspace', runWorkspaceHandler);
 
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
-    console.log(`Express Main Backend running on port ${PORT}`);
-});
+if (process.env.NODE_ENV !== 'production' || require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`Express Main Backend running on port ${PORT}`);
+    });
+}
+
+module.exports = app;
