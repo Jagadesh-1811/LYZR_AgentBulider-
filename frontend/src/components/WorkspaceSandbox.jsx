@@ -3,6 +3,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Send, Users, Activity, CheckCircle2, Copy, Check, Terminal, Code2, PencilLine, RotateCcw, Link } from "lucide-react";
 import MarkdownText from "@/components/ui/MarkdownText";
+import { db } from "@/lib/firebase";
+import { doc, getDoc, setDoc, updateDoc, arrayUnion } from "firebase/firestore";
 
 /* ------------------------------------------------------------------ */
 /*  Helpers for the DEV CONSOLE                                        */
@@ -132,7 +134,7 @@ function buildCodeLines(workspace, task, executionLog, finalResult) {
 /*  Component                                                          */
 /* ------------------------------------------------------------------ */
 
-export default function WorkspaceSandbox({ workspace = { name: "Team", agents: [] }, isPublic = false }) {
+export default function WorkspaceSandbox({ workspace = { name: "Team", agents: [] }, user, isPublic = false }) {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
@@ -150,6 +152,38 @@ export default function WorkspaceSandbox({ workspace = { name: "Team", agents: [
   const logRef = useRef([]); // mirror of executionLog for building the exact code in chat
   const taskRef = useRef(null); // mirror of lastTask to avoid stale closures in the stream handler
   const codeDirty = useRef(false); // once the user edits, stop auto-syncing until Reset
+
+  const sessionId = !isPublic && user?.email && workspace?.id ? `${user.email}_ws_${workspace.id}` : null;
+
+  useEffect(() => {
+    async function loadChatHistory() {
+      if (!sessionId) {
+        setMessages([
+          { role: "assistant", content: `Connected to **${workspace?.name || "Workspace"}**.\nHow can this team help you today?` }
+        ]);
+        return;
+      }
+
+      const chatRef = doc(db, "chatSessions", sessionId);
+      const chatSnap = await getDoc(chatRef);
+
+      if (chatSnap.exists()) {
+        setMessages(chatSnap.data().messages || []);
+      } else {
+        const initialMessages = [
+          { role: "assistant", content: `Connected to **${workspace?.name || "Workspace"}**.\nHow can this team help you today?` }
+        ];
+        setMessages(initialMessages);
+        await setDoc(chatRef, {
+          userId: user.email,
+          workspaceId: workspace.id,
+          messages: initialMessages
+        });
+      }
+    }
+
+    loadChatHistory();
+  }, [sessionId, workspace?.id, workspace?.name, user?.email]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -227,7 +261,21 @@ export default function WorkspaceSandbox({ workspace = { name: "Team", agents: [
         `\n\n** Run summary**\n${tokenLines}\n- **Total:** ${totalTokens} tokens · ${totalSecs}\n`;
       const summaryContent =
         `${data.result}\n\n---\n${runSummary}`;
-      setMessages((prev) => [...prev, { role: "assistant", content: summaryContent }]);
+      
+      const newAsstMsg = { role: "assistant", content: summaryContent };
+      setMessages((prev) => [...prev, newAsstMsg]);
+
+      // Save to Firestore
+      if (sessionId) {
+        try {
+          const chatRef = doc(db, "chatSessions", sessionId);
+          updateDoc(chatRef, {
+            messages: arrayUnion(newAsstMsg)
+          }).catch(err => console.error("Failed to append final response", err));
+        } catch (e) {
+          console.error(e);
+        }
+      }
     } else if (data.type === "error") {
       pushEvent({
         time: fmtTime(), kind: "error",
@@ -244,7 +292,22 @@ export default function WorkspaceSandbox({ workspace = { name: "Team", agents: [
 
     const userMessage = inputValue.trim();
     setInputValue("");
-    setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
+    
+    const newUserMsg = { role: "user", content: userMessage };
+    setMessages((prev) => [...prev, newUserMsg]);
+    
+    // Save user message to Firestore
+    if (sessionId) {
+      try {
+        const chatRef = doc(db, "chatSessions", sessionId);
+        updateDoc(chatRef, {
+          messages: arrayUnion(newUserMsg)
+        }).catch(err => console.error("Failed to append user message", err));
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
     setExecutionLog([]);
     setTraceEvents([]);
     setExpandedEvent(null);

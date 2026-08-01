@@ -213,7 +213,7 @@ export default function SingleAgentSetup() {
               Workspace: <span className="text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md">{activeWorkspace?.name || "Team"}</span>
             </div>
           </div>
-          <WorkspaceSandbox workspace={activeWorkspace} />
+          <WorkspaceSandbox workspace={activeWorkspace} user={user} />
         </div>
       </div>
     );
