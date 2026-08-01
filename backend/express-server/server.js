@@ -328,7 +328,7 @@ app.post('/api/run-agent', authenticateToken, async (req, res) => {
 });
 
 // Endpoint: Stream Chat (Server-Sent Events)
-app.post('/api/stream-agent', authenticateToken, async (req, res) => {
+const streamAgentHandler = async (req, res) => {
     try {
         const payload = req.body; 
         const LYZR_API_KEY = process.env.LYZR_API_KEY;
@@ -398,7 +398,10 @@ app.post('/api/stream-agent', authenticateToken, async (req, res) => {
                 : `Agent streaming failed (HTTP ${status}). Please verify the agent ID and your LYZR_API_KEY.`
         });
     }
-});
+};
+
+app.post('/api/stream-agent', authenticateToken, streamAgentHandler);
+app.post('/api/public/stream-agent', streamAgentHandler);
 
 // Endpoint: Get Agent Versions
 app.get('/api/versions/:agentId', authenticateToken, async (req, res) => {
@@ -428,7 +431,7 @@ app.post('/api/versions/rollback', authenticateToken, async (req, res) => {
 });
 
 // Endpoint: Execute Workspace Task
-app.post('/api/run-workspace', authenticateToken, async (req, res) => {
+const runWorkspaceHandler = async (req, res) => {
     const { task, agentIds, workspaceName } = req.body;
     const LYZR_API_KEY = process.env.LYZR_API_KEY;
     
@@ -526,7 +529,10 @@ app.post('/api/run-workspace', authenticateToken, async (req, res) => {
         res.write('data: [DONE]\n\n');
         res.end();
     }
-});
+};
+
+app.post('/api/run-workspace', authenticateToken, runWorkspaceHandler);
+app.post('/api/public/run-workspace', runWorkspaceHandler);
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {

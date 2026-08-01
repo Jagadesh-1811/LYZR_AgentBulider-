@@ -231,6 +231,38 @@ export function RagIntro({ onNext }) {
         </div>
       </div>
 
+      {/* ── How to configure RAG (visual) ───────────────────────────────────── */}
+      <div className="bg-white rounded-2xl border border-[#e5e7eb] shadow-sm p-6">
+        <h2 className="text-base font-bold text-[#111827] mb-5">How to configure RAG — in 3 steps</h2>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-0 sm:gap-0">
+
+          {[
+            { step: "1", icon: "", title: "Enable RAG", sub: "Turn on the RAG feature in the next screen", color: "#7c3aed", bg: "#f3f0ff" },
+            { step: "→", icon: null, title: null, sub: null, isArrow: true },
+            { step: "2", icon: "", title: "Add Sources", sub: "Paste a URL, enter text, or upload a file", color: "#d97706", bg: "#fffbeb" },
+            { step: "→", icon: null, title: null, sub: null, isArrow: true },
+            { step: "3", icon: "", title: "Tweak Settings", sub: "Select vector store & embedding model", color: "#059669", bg: "#f0fdf4" },
+          ].map((item, i) => {
+            if (item.isArrow) {
+              return (
+                <div key={i} className="hidden sm:flex items-center justify-center px-2 text-[#d1d5db] text-xl font-bold shrink-0">→</div>
+              );
+            }
+            return (
+              <div
+                key={i}
+                className="flex-1 rounded-xl p-4 border text-center"
+                style={{ backgroundColor: item.bg, borderColor: item.color + '40', minWidth: 0 }}
+              >
+                <div className="text-xs font-bold mb-1" style={{ color: item.color }}>Step {item.step}</div>
+                <div className="text-xs font-bold text-[#111827] mb-1">{item.title}</div>
+                <div className="text-xs text-[#6b7280] leading-relaxed">{item.sub}</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
       {/* ── CTA ──────────────────────────────────────────────────────── */}
       <div className="flex items-center justify-between bg-[#f8fafc] border border-[#e5e7eb] rounded-xl p-5">
         <div>

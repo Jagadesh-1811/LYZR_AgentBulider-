@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { Send, Users, Activity, CheckCircle2, Copy, Check, Terminal, Code2, PencilLine, RotateCcw } from "lucide-react";
+import { Send, Users, Activity, CheckCircle2, Copy, Check, Terminal, Code2, PencilLine, RotateCcw, Link } from "lucide-react";
 import MarkdownText from "@/components/ui/MarkdownText";
 
 /* ------------------------------------------------------------------ */
@@ -132,7 +132,7 @@ function buildCodeLines(workspace, task, executionLog, finalResult) {
 /*  Component                                                          */
 /* ------------------------------------------------------------------ */
 
-export default function WorkspaceSandbox({ workspace = { name: "Team", agents: [] } }) {
+export default function WorkspaceSandbox({ workspace = { name: "Team", agents: [] }, isPublic = false }) {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
@@ -255,13 +255,14 @@ export default function WorkspaceSandbox({ workspace = { name: "Team", agents: [
     setIsProcessing(true);
 
     try {
-      const token = localStorage.getItem("lyzr_auth_token");
-      const response = await fetch("http://localhost:4000/api/run-workspace", {
+      const token = !isPublic ? localStorage.getItem("lyzr_auth_token") : null;
+      const endpoint = isPublic ? "http://localhost:4000/api/public/run-workspace" : "http://localhost:4000/api/run-workspace";
+      const headers = { "Content-Type": "application/json" };
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+
+      const response = await fetch(endpoint, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
-        },
+        headers,
         body: JSON.stringify({
           task: userMessage,
           agentIds: workspace.agents,
@@ -343,10 +344,27 @@ export default function WorkspaceSandbox({ workspace = { name: "Team", agents: [
             </p>
           </div>
         </div>
-        <span className="flex items-center gap-1.5 text-[10px] font-bold tracking-widest text-[#7c3aed] bg-white border border-[#ddd6fe] rounded-md px-2.5 py-1.5 uppercase">
-          <Terminal size={11} />
-          Dev Console
-        </span>
+        <div className="flex items-center gap-3">
+          {!isPublic && workspace.id && (
+            <button
+              onClick={() => {
+                const url = `${window.location.origin}/share/workspace/${workspace.id}`;
+                navigator.clipboard.writeText(url);
+                alert("Public Workspace Link Copied!\n" + url);
+              }}
+              className="flex items-center gap-1.5 text-[11px] font-bold text-gray-700 bg-white border border-gray-300 rounded-md px-3 py-1.5 hover:bg-gray-50 transition-colors"
+            >
+              <Link size={12} />
+              Share Link
+            </button>
+          )}
+          {!isPublic && (
+            <span className="flex items-center gap-1.5 text-[10px] font-bold tracking-widest text-[#7c3aed] bg-white border border-[#ddd6fe] rounded-md px-2.5 py-1.5 uppercase">
+              <Terminal size={11} />
+              Dev Console
+            </span>
+          )}
+        </div>
       </div>
 
       {/* Split body: chat | dev console */}

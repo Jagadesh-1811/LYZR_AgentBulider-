@@ -6,7 +6,7 @@ import MarkdownText from "@/components/ui/MarkdownText";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, setDoc, updateDoc, arrayUnion } from "firebase/firestore";
 
-export default function AgentSandbox({ config = {}, user, authToken }) {
+export default function AgentSandbox({ config = {}, user, authToken: initAuthToken, isPublic = false }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
@@ -101,12 +101,14 @@ export default function AgentSandbox({ config = {}, user, authToken }) {
       setMessages((prev) => [...prev, { type: "agent", text: "" }]);
       let streamedResponse = "";
 
-      const response = await fetch("http://localhost:4000/api/stream-agent", {
+      const authToken = !isPublic ? (initAuthToken || localStorage.getItem("lyzr_auth_token")) : null;
+      const endpoint = isPublic ? "http://localhost:4000/api/public/stream-agent" : "http://localhost:4000/api/stream-agent";
+      const headers = { "Content-Type": "application/json" };
+      if (authToken) headers["Authorization"] = `Bearer ${authToken}`;
+
+      const response = await fetch(endpoint, {
         method: "POST",
-        headers: { 
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${authToken}`
-        },
+        headers,
         body: JSON.stringify({
           config: config,
           query: userMessage,

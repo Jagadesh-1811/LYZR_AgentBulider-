@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ChevronRight, Code, Terminal, Activity, CheckCircle2 } from "lucide-react";
+import { ChevronRight, Code, Terminal, Activity, CheckCircle2, Link } from "lucide-react";
 import CodeExporter from "@/components/CodeExporter";
 import DeveloperInsights from "@/components/DeveloperInsights";
 import AgentSandbox from "@/components/AgentSandbox";
@@ -369,6 +369,17 @@ export default function SingleAgentSetup() {
                   <p className="text-xs text-gray-500 mt-0.5">Use the snippet in CodeExporter or launch the live URL.</p>
                 </div>
                 <div className="flex gap-3">
+                  <button
+                    onClick={() => {
+                      const url = `${window.location.origin}/share/agent/${deployedAgentId}`;
+                      navigator.clipboard.writeText(url);
+                      alert("Public Agent Link Copied!\n" + url);
+                    }}
+                    className="flex items-center gap-2 px-5 py-2.5 text-sm font-bold bg-white text-emerald-700 border border-emerald-200 rounded-lg shadow-sm hover:bg-emerald-50 transition-colors"
+                  >
+                    <Link size={16} />
+                    Share Public Link
+                  </button>
                   <button
                     onClick={() => navigator.clipboard.writeText(deployedAgentId || "")}
                     className="px-5 py-2.5 text-sm font-bold bg-white text-gray-700 border border-gray-200 rounded-lg shadow-sm hover:bg-gray-50 transition-colors"
