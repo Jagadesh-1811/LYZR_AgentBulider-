@@ -154,7 +154,10 @@ app.post('/api/deploy-agent', authenticateToken, async (req, res) => {
 
         // Hit Lyzr v3 API
         // Detect provider from model name
-        const modelName = payload.model || "gpt-4o";
+        let modelName = payload.model || "gpt-4o";
+        if (modelName === "gemini-2.5-pro") {
+            modelName = "gemini-1.5-pro";
+        }
         let providerId = "openai";
         if (modelName.startsWith("gemini")) providerId = "google";
         else if (modelName.startsWith("claude")) providerId = "anthropic";

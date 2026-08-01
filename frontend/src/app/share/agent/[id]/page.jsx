@@ -24,8 +24,9 @@ export default function PublicAgentPage({ params }) {
           const agentData = docSnap.data();
           setConfig({
             agentId: id,
-            name: agentData.name || "Public Agent",
-            model: agentData.model || "Lyzr AI",
+            name: agentData.config?.name || agentData.name || "Public Agent",
+            model: agentData.config?.model || agentData.model || "Lyzr AI",
+            ...agentData.config,
             ...agentData
           });
         } else {
