@@ -371,7 +371,8 @@ export default function SingleAgentSetup() {
                 <div className="flex gap-3">
                   <button
                     onClick={() => {
-                      const url = `${window.location.origin}/share/agent/${deployedAgentId}`;
+                      const baseUrl = process.env.NEXT_PUBLIC_SHARE_URL || window.location.origin;
+                      const url = `${baseUrl}/share/agent/${deployedAgentId}`;
                       navigator.clipboard.writeText(url);
                       alert("Public Agent Link Copied!\n" + url);
                     }}

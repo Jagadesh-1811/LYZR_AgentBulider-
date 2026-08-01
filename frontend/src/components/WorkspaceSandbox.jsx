@@ -348,7 +348,8 @@ export default function WorkspaceSandbox({ workspace = { name: "Team", agents: [
           {!isPublic && workspace.id && (
             <button
               onClick={() => {
-                const url = `${window.location.origin}/share/workspace/${workspace.id}`;
+                const baseUrl = process.env.NEXT_PUBLIC_SHARE_URL || window.location.origin;
+                const url = `${baseUrl}/share/workspace/${workspace.id}`;
                 navigator.clipboard.writeText(url);
                 alert("Public Workspace Link Copied!\n" + url);
               }}
