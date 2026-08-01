@@ -337,13 +337,15 @@ const streamAgentHandler = async (req, res) => {
         if (!LYZR_API_KEY) {
             return res.status(401).json({ success: false, error: "Missing LYZR_API_KEY" });
         }
-        if (!payload.config?.agentId) {
+        
+        const agentId = payload.config?.agentId || payload.config?.id;
+        if (!agentId) {
             return res.status(400).json({ success: false, error: "Missing agentId." });
         }
 
         const chatPayload = {
             user_id: "default_user",
-            agent_id: payload.config.agentId,
+            agent_id: agentId,
             session_id: payload.sessionId || "demo_session_123",
             message: payload.query || "Hello Agent!"
         };
