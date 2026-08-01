@@ -14,7 +14,8 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(cors());
+const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
+app.use(cors({ origin: frontendUrl }));
 
 // --- Mock Databases ---
 const usersDB = [
