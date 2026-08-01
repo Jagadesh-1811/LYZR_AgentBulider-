@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import AgentSandbox from "@/components/AgentSandbox";
 import { db } from "@/lib/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import { Loader2 } from "lucide-react";
 
 export default function PublicAgentPage({ params }) {
@@ -16,13 +16,14 @@ export default function PublicAgentPage({ params }) {
   useEffect(() => {
     async function fetchAgent() {
       try {
-        const docRef = doc(db, "deployments", id);
-        const docSnap = await getDoc(docRef);
+        const q = query(collection(db, "deployments"), where("agentId", "==", id));
+        const querySnapshot = await getDocs(q);
         
-        if (docSnap.exists()) {
+        if (!querySnapshot.empty) {
+          const docSnap = querySnapshot.docs[0];
           const agentData = docSnap.data();
           setConfig({
-            agentId: docSnap.id,
+            agentId: id,
             name: agentData.name || "Public Agent",
             model: agentData.model || "Lyzr AI",
             ...agentData
