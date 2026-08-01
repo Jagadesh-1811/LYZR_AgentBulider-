@@ -16,7 +16,7 @@ export default function PublicAgentPage({ params }) {
   useEffect(() => {
     async function fetchAgent() {
       try {
-        const docRef = doc(db, "agents", id);
+        const docRef = doc(db, "deployments", id);
         const docSnap = await getDoc(docRef);
         
         if (docSnap.exists()) {
